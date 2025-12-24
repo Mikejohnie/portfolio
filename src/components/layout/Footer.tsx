@@ -25,13 +25,16 @@ const Footer = () => {
               <h4 className="font-medium">Navigation</h4>
               <ul className="space-y-2 text-muted-foreground">
                 <li>
-                  <Link href="/" className="hover:text-foreground transition">
+                  <Link
+                    href="#home"
+                    className="hover:text-foreground transition"
+                  >
                     Home
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/about"
+                    href="#about"
                     className="hover:text-foreground transition"
                   >
                     About
@@ -39,7 +42,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="/projects"
+                    href="#projects"
                     className="hover:text-foreground transition"
                   >
                     Projects
@@ -47,7 +50,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="/contact"
+                    href="#contact"
                     className="hover:text-foreground transition"
                   >
                     Contact
@@ -60,10 +63,7 @@ const Footer = () => {
               <h4 className="font-medium">Projects</h4>
               <ul className="space-y-2 text-muted-foreground">
                 <li>
-                  <Link
-                    href="/projects/nexamart"
-                    className="hover:text-foreground transition"
-                  >
+                  <Link href="#" className="hover:text-foreground transition">
                     NexaMart
                   </Link>
                 </li>
@@ -94,7 +94,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://github.com"
+                    href="https://github.com/michaelnku"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-foreground transition"
