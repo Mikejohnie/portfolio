@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ResumeButton from "@/components/home/ResumeButton";
 
-const ContactPage = () => {
+const ContactSection = () => {
   return (
     <section className="mx-auto max-w-4xl px-6  space-y-16">
       {/* HEADER */}
@@ -96,4 +96,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default ContactSection;

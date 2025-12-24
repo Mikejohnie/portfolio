@@ -27,7 +27,7 @@ const projects = [
   },
 ];
 
-const ProjectsPage = () => {
+const ProjectsSection = () => {
   return (
     <section className="mx-auto max-w-5xl px-6 space-y-20">
       {/* HEADER */}
@@ -94,4 +94,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default ProjectsSection;

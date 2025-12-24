@@ -1,48 +1,53 @@
-"use client";
-
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function HomeSkeleton() {
+const HomeSkeleton = () => {
   return (
-    <main
-      className="
-        space-y-10
-        min-h-[160vh]
-        sm:min-h-[140vh]
-        md:min-h-[120vh]
-        lg:min-h-[110vh]
-      "
-    >
-      {/* Banner */}
-      <Skeleton className="h-40 sm:h-48 md:h-56 w-full rounded-lg" />
+    <main className="mx-auto max-w-7xl px-6 py-20 space-y-20">
+      {/* HERO SKELETON */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        {/* LEFT */}
+        <div className="space-y-6">
+          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-12 w-3/4" />
+          <Skeleton className="h-6 w-1/2" />
 
-      {/* Categories */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton
-            key={i}
-            className="h-16 sm:h-20 rounded-lg ring-1 ring-[var(--brand-blue)]/5"
-          />
-        ))}
-      </div>
+          <div className="space-y-3 pt-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
+          </div>
 
-      {/* Product Rows */}
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, j) => (
-            <Skeleton
-              key={j}
-              className="
-                h-52
-                sm:h-56
-                md:h-60
-                rounded-xl
-                ring-1 ring-[var(--brand-blue)]/5
-              "
-            />
-          ))}
+          <div className="flex gap-4 pt-6">
+            <Skeleton className="h-10 w-32 rounded-md" />
+            <Skeleton className="h-10 w-32 rounded-md" />
+          </div>
         </div>
-      ))}
+
+        {/* RIGHT IMAGE */}
+        <div className="flex justify-center md:justify-end">
+          <Skeleton className="h-[420px] w-[320px] rounded-2xl" />
+        </div>
+      </section>
+
+      {/* ABOUT PREVIEW */}
+      <section className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-4/6" />
+      </section>
+
+      {/* PROJECTS PREVIEW */}
+      <section className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
+        </div>
+      </section>
     </main>
   );
-}
+};
+
+export default HomeSkeleton;

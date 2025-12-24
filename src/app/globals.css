@@ -5,6 +5,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* globals.css */
+.section-spacing {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

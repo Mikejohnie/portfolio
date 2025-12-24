@@ -1,7 +1,7 @@
 import Hero from "@/components/hero/Hero";
-import AboutPage from "./AboutMe/page";
-import ProjectsPage from "./Projects/page";
-import ContactPage from "./Contact/page";
+import AboutSection from "@/components/sections/AboutSection";
+import ProjectsSection from "@/components/sections/ProjectsSection";
+import ContactSection from "@/components/sections/ContactSection";
 
 const HomeContent = () => {
   return (
@@ -10,16 +10,16 @@ const HomeContent = () => {
         <Hero />
       </section>
 
-      <section id="about" className="py-24">
-        <AboutPage />
+      <section id="about" className="section-spacing">
+        <AboutSection />
       </section>
 
-      <section id="projects" className="py-24">
-        <ProjectsPage />
+      <section id="projects" className="section-spacing">
+        <ProjectsSection />
       </section>
 
-      <section id="contact" className="py-24">
-        <ContactPage />
+      <section id="contact" className="section-spacing">
+        <ContactSection />
       </section>
     </>
   );

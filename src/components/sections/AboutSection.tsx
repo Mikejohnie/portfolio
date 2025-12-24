@@ -34,7 +34,7 @@ const timeline = [
   },
 ];
 
-export default function AboutPage() {
+export default function AboutSection() {
   return (
     <section className="mx-auto max-w-5xl px-6 space-y-20">
       {/* HEADER */}

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden py-6">
+    <section className="relative overflow-hidden py-6 mx-auto max-w-6xl px-6">
       {/* BACKGROUND GLOW */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
