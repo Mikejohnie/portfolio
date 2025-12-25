@@ -1,6 +1,5 @@
 import ResumeButton from "@/components/home/ResumeButton";
 import Image from "next/image";
-import Link from "next/link";
 
 const techStack = [
   "Next.js",
@@ -52,13 +51,13 @@ export default function AboutSection() {
         <div className="flex justify-center md:justify-start">
           <div className="relative rounded-2xl p-[3px] bg-gradient-to-tr from-blue-500 to-purple-600">
             <div className="rounded-2xl bg-background p-2">
-              <img
+              <Image
                 src="https://j1ruac0eqa.ufs.sh/f/3IGtMbPoM9DuSas5xihcbumZ4adE9sqUPtXeSABHVgvi37Dl"
                 alt="Michael Nku"
                 width={260}
                 height={320}
                 className="rounded-xl object-cover"
-                // priority
+                priority
               />
             </div>
           </div>

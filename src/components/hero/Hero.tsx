@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 const Hero = () => {
   return (
@@ -70,13 +70,13 @@ const Hero = () => {
         <div className="flex justify-center md:justify-end">
           <div className="relative rounded-2xl p-[3px] bg-gradient-to-tr from-blue-500 to-purple-600">
             <div className="rounded-2xl bg-background p-2">
-              <img
+              <Image
                 src="https://j1ruac0eqa.ufs.sh/f/3IGtMbPoM9DuSas5xihcbumZ4adE9sqUPtXeSABHVgvi37Dl"
                 alt="Michael Nku"
                 width={340}
                 height={420}
                 className="rounded-xl object-cover"
-                // priority
+                priority
               />
             </div>
           </div>

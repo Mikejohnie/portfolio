@@ -21,7 +21,7 @@ const navLinks = [
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
-export default function Navbar() {
+export default function SiteNavbar() {
   const activeSection = useActiveSection(navLinks.map((l) => l.id));
   const [open, setOpen] = useState(false);
 

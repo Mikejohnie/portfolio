@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
+import { Toaster } from "@/components/ui/sonner";
+import { auth } from "@/auth/auth";
+import QueryProvider from "@/providers/queryProvider";
+import { ThemeProvider } from "@/providers/theme-provider";
+import { SessionProvider } from "next-auth/react";
+
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "./api/uploadthing/core";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,20 +26,36 @@ export const metadata: Metadata = {
   description: "My portfolio",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        {children}
+  const session = await auth();
 
-        <Footer />
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+      >
+        <QueryProvider>
+          <SessionProvider session={session}>
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {/* App Content */}
+              {children}
+
+              {/* Global Toasts */}
+              <Toaster richColors closeButton />
+            </ThemeProvider>
+          </SessionProvider>
+        </QueryProvider>
       </body>
     </html>
   );
