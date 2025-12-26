@@ -1,19 +1,18 @@
 import { auth } from "@/auth/auth";
+import { normalizeUser } from "@/lib/normalizeUser";
+import { SessionUser } from "./types";
 
 export const CurrentUser = async () => {
   const session = await auth();
-
-  return session?.user;
+  return normalizeUser(session?.user as SessionUser);
 };
 
 export const CurrentUserId = async () => {
-  const session = await auth();
-
-  return session?.user.id;
+  const user = await CurrentUser();
+  return user?.id ?? null;
 };
 
 export const CurrentRole = async () => {
-  const session = await auth();
-
-  return session?.user.role;
+  const user = await CurrentUser();
+  return user?.role ?? null;
 };

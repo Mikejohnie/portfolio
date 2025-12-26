@@ -1,8 +1,7 @@
-import Navbar from "@/components/layout/SiteNavbar";
+import SiteNavbar from "@/components/layout/SiteNavbar";
+import AdminNavbar from "@/components/layout/AdminNavbar";
 import Footer from "@/components/layout/Footer";
 import { CurrentUser } from "@/lib/currentUser";
-import AdminNavbar from "@/components/layout/AdminNavbar";
-import SiteNavbar from "@/components/layout/SiteNavbar";
 
 export default async function SiteLayout({
   children,
@@ -10,19 +9,20 @@ export default async function SiteLayout({
   children: React.ReactNode;
 }) {
   const user = await CurrentUser();
+  const isAdmin = user?.role === "ADMIN";
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* NAVBAR */}
-      {(!user || user.role === "USER") && <SiteNavbar />}
-
-      {user?.role === "ADMIN" && <AdminNavbar initialUser={user} />}
+      {isAdmin ? <AdminNavbar initialUser={user} /> : <SiteNavbar />}
 
       {/* PAGE CONTENT */}
-      <main className="flex-1 pt-16">{children}</main>
+      <main className={`flex-1 ${isAdmin ? "pt-16" : "pt-16"}`}>
+        {children}
+      </main>
 
-      {/* FOOTER */}
-      <Footer />
+      {/* FOOTER (PUBLIC ONLY) */}
+      {!isAdmin && <Footer />}
     </div>
   );
 }
