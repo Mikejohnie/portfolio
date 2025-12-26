@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +9,50 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { LayoutDashboard, Settings, LogOut, User } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  Menu,
+  LayoutDashboard,
+  FolderKanban,
+  Mail,
+  BarChart3,
+  Settings,
+  LogOut,
+  User,
+} from "lucide-react";
 import { UserDTO } from "@/lib/types";
 import { useLogout } from "@/hooks/useLogout";
 import { useGetCurrentUserQuery } from "@/stores/useGetCurrentUserQuery";
+import { Button } from "@/components/ui/button";
+
+const mobileLinks = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    label: "Projects",
+    href: "/dashboard/projects",
+    icon: FolderKanban,
+  },
+  {
+    label: "Messages",
+    href: "/dashboard/messages",
+    icon: Mail,
+  },
+  {
+    label: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
+  },
+];
 
 export default function AdminNavbar({
   initialUser,
@@ -26,10 +65,42 @@ export default function AdminNavbar({
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* BRAND + CONTEXT */}
-        <div className="flex items-center gap-4">
+        {/* LEFT: BRAND + MOBILE MENU */}
+        <div className="flex items-center gap-3">
+          {/* MOBILE MENU */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="ghost" className="md:hidden">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="left" className="w-64">
+              <SheetHeader>
+                <SheetTitle>Admin Menu</SheetTitle>
+              </SheetHeader>
+
+              <nav className="mt-6 flex flex-col gap-2">
+                {mobileLinks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition"
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </SheetContent>
+          </Sheet>
+
+          {/* BRAND */}
           <Link href="/" className="flex items-center gap-3">
-            <img
+            <Image
               src="https://j1ruac0eqa.ufs.sh/f/3IGtMbPoM9Du0BUsAYCqwSbDInhZT2MBG1Xz9W6v0y4Ogfrc"
               alt="Michael Nku"
               width={34}
@@ -41,44 +112,13 @@ export default function AdminNavbar({
             </span>
           </Link>
 
+          {/* ADMIN BADGE */}
           <span className="hidden sm:inline-flex rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-600">
             Admin
           </span>
         </div>
 
-        {/* QUICK ACTIONS */}
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
-          >
-            <LayoutDashboard className="w-4 h-4" />
-            Dashboard
-          </Link>
-
-          <Link
-            href="/dashboard/projects"
-            className="text-muted-foreground hover:text-foreground transition"
-          >
-            Projects
-          </Link>
-
-          <Link
-            href="/dashboard/messages"
-            className="text-muted-foreground hover:text-foreground transition"
-          >
-            Messages
-          </Link>
-
-          <Link
-            href="/dashboard/analytics"
-            className="text-muted-foreground hover:text-foreground transition"
-          >
-            Analytics
-          </Link>
-        </nav>
-
-        {/* ACCOUNT */}
+        {/* RIGHT: ACCOUNT MENU */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-muted transition">

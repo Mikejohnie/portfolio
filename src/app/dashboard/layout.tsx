@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation";
-import { CurrentUser } from "@/lib/currentUser";
 import AdminNavbar from "@/components/layout/AdminNavbar";
-import DashboardSidebar from "@/components/layout/DashboardSidebar";
+import AdminSidebar from "@/components/layout/AdminSidebar";
+import { CurrentUser } from "@/lib/currentUser";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
@@ -10,25 +10,21 @@ export default async function DashboardLayout({
 }) {
   const user = await CurrentUser();
 
-  if (!user) redirect("/auth/admin/login");
-  if (user.role === "USER") redirect("/");
+  if (!user || user.role !== "ADMIN") {
+    redirect("/");
+  }
 
   return (
-    <div>
-      {/* TOP NAVBAR */}
+    <div className="min-h-screen">
+      {/* TOP NAV */}
       <AdminNavbar initialUser={user} />
 
-      <div className="flex max-w-full overflow-x-hidden">
-        {/* LEFT SIDEBAR */}
-        {/* <DashboardSidebar initialUser={user} /> */}
-        {/* LEFT SIDEBAR */}
-        <DashboardSidebar />
+      <div className="flex">
+        {/* SIDEBAR */}
+        <AdminSidebar />
 
         {/* MAIN CONTENT */}
-        <main className="flex-1 w-full max-w-full px-4 md:px-6 py-4 md:ml-64 overflow-x-hidden">
-          {/*global Currency rate*/}
-          {children}
-        </main>
+        <main className="flex-1 px-6 py-6">{children}</main>
       </div>
     </div>
   );

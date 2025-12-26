@@ -4,6 +4,10 @@ export const publicRoutes = [
   "/auth/forgot-password",
   "/auth/reset-password",
   "/api/uploadthing",
+  "/about",
+  "/projects",
+  "/contact",
+  "/api/contact",
 ];
 
 export const authRoutes = [
@@ -15,5 +19,7 @@ export const authRoutes = [
 ];
 
 export const apiAuthPrefix = "/api/auth";
+
+export const dashboardPrefix = "/dashboard";
 
 export const ADMIN_LOGIN_REDIRECT = "/dashboard";
