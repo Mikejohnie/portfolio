@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import {
   createProjectSchema,
   createProjectSchemaType,
+  updateProjectSchema,
+  UpdateProjectSchemaType,
 } from "@/lib/zodValidation";
 
 export async function createProject(values: createProjectSchemaType) {
@@ -29,5 +31,45 @@ export async function createProject(values: createProjectSchemaType) {
 
   revalidatePath("/dashboard/projects");
 
+  return { success: true };
+}
+
+export async function updateProject(
+  projectId: string,
+  values: UpdateProjectSchemaType
+) {
+  const user = await CurrentUser();
+
+  if (!user || user.role !== "ADMIN") {
+    return { error: "Unauthorized" };
+  }
+
+  const parsed = updateProjectSchema.safeParse(values);
+  if (!parsed.success) {
+    return { error: "Invalid project data" };
+  }
+
+  await prisma.project.update({
+    where: { id: projectId },
+    data: parsed.data,
+  });
+
+  revalidatePath("/dashboard/projects");
+
+  return { success: true };
+}
+
+export async function deleteProject(projectId: string) {
+  const user = await CurrentUser();
+
+  if (!user || user.role !== "ADMIN") {
+    return { error: "Unauthorized" };
+  }
+
+  await prisma.project.delete({
+    where: { id: projectId },
+  });
+
+  revalidatePath("/dashboard/projects");
   return { success: true };
 }

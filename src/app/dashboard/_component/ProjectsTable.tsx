@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProjectUI } from "@/lib/types";
+import { DeleteProjectModal } from "./DeleteProjectModal";
+import Link from "next/link";
 
 interface Props {
   projects: ProjectUI[];
@@ -28,6 +30,10 @@ export default function ProjectsTable({ projects }: Props) {
               <td className="px-4 py-3">
                 <div className="font-medium">{project.name}</div>
                 <div className="text-xs text-muted-foreground">
+                  {project.role} · {project.summary.slice(0, 60)}…
+                </div>
+
+                <div className="text-xs text-muted-foreground">
                   {project.summary.slice(0, 60)}…
                 </div>
               </td>
@@ -37,6 +43,11 @@ export default function ProjectsTable({ projects }: Props) {
                   <Badge>Published</Badge>
                 ) : (
                   <Badge variant="secondary">Draft</Badge>
+                )}
+                {project.isFlagship && (
+                  <Badge className="bg-blue-500/10 text-blue-600 border-blue-500">
+                    Flagship
+                  </Badge>
                 )}
 
                 {project.featured && <Badge variant="outline">Featured</Badge>}
@@ -56,12 +67,12 @@ export default function ProjectsTable({ projects }: Props) {
               </td>
 
               <td className="px-4 py-3 text-right space-x-2">
-                <Button size="sm" variant="outline">
-                  Edit
-                </Button>
-                <Button size="sm" variant="destructive">
-                  Delete
-                </Button>
+                <Link href={`/dashboard/projects/${project.id}/update`}>
+                  <Button size="sm" variant="outline">
+                    Edit
+                  </Button>
+                </Link>
+                <DeleteProjectModal projectId={project.id} />
               </td>
             </tr>
           ))}

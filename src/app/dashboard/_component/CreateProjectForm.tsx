@@ -35,7 +35,6 @@ export default function CreateProjectForm() {
       name: "",
       role: "Full-Stack Developer",
       summary: "",
-      description: "",
       techStack: [],
       keyFeatures: [],
       liveUrl: "",
@@ -99,20 +98,6 @@ export default function CreateProjectForm() {
         {/* DESCRIPTION */}
         <FormField
           control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea rows={4} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="summary"
           render={({ field }) => (
             <FormItem>
@@ -130,16 +115,16 @@ export default function CreateProjectForm() {
           name="keyFeatures"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Key Features</FormLabel>
+              <FormLabel>Key Features (one per line)</FormLabel>
               <FormControl>
                 <Textarea
-                  rows={3}
-                  placeholder="Role-based access, Stripe payments, Admin dashboard"
-                  value={field.value.join(", ")}
+                  rows={4}
+                  placeholder={`Role-based access\nStripe payments\nAdmin dashboard`}
+                  value={field.value.join("\n")}
                   onChange={(e) =>
                     field.onChange(
                       e.target.value
-                        .split(",")
+                        .split("\n")
                         .map((f) => f.trim())
                         .filter(Boolean)
                     )

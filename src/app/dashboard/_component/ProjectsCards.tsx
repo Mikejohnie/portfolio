@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProjectUI } from "@/lib/types";
+import { DeleteProjectModal } from "./DeleteProjectModal";
+import Link from "next/link";
 
 interface Props {
   projects: ProjectUI[];
@@ -10,15 +12,30 @@ export default function ProjectsCards({ projects }: Props) {
   return (
     <div className="space-y-4">
       {projects.map((project) => (
-        <div key={project.id} className="rounded-xl border p-4 space-y-3">
+        <div className="rounded-xl border p-4 space-y-3" key={project.id}>
           <div className="flex items-start justify-between">
-            <h3 className="font-semibold leading-tight">{project.name}</h3>
-            <p className="text-xs text-muted-foreground">{project.role}</p>
+            <div>
+              <h3 className="font-semibold">{project.name}</h3>
+              <p className="text-xs text-muted-foreground">{project.role}</p>
+            </div>
 
-            {project.featured && <Badge variant="outline">Featured</Badge>}
+            <div className="flex gap-1">
+              {project.isFlagship && (
+                <Badge className="bg-blue-500/10 text-blue-600 border-blue-500">
+                  Flagship
+                </Badge>
+              )}
+              {project.featured && <Badge variant="outline">Featured</Badge>}
+            </div>
           </div>
 
           <p className="text-sm text-muted-foreground">{project.summary}</p>
+
+          <ul className="text-xs text-muted-foreground list-disc pl-4">
+            {project.keyFeatures.slice(0, 2).map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
 
           <div className="flex flex-wrap gap-1">
             {project.techStack.map((tech) => (
@@ -36,12 +53,12 @@ export default function ProjectsCards({ projects }: Props) {
             )}
 
             <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                Edit
-              </Button>
-              <Button size="sm" variant="destructive">
-                Delete
-              </Button>
+              <Link href={`/dashboard/projects/${project.id}/update`}>
+                <Button size="sm" variant="outline">
+                  Edit
+                </Button>
+              </Link>
+              <DeleteProjectModal projectId={project.id} />
             </div>
           </div>
         </div>
