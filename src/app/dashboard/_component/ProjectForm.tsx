@@ -40,10 +40,13 @@ export default function ProjectForm({ project }: ProjectFormProps) {
       name: project.name,
       role: project.role,
       summary: project.summary,
-      techStack: project.techStack,
+
       keyFeatures: project.keyFeatures,
+      techStack: project.techStack,
+
       liveUrl: project.liveUrl ?? "",
       repoUrl: project.repoUrl ?? "",
+
       isFlagship: project.isFlagship,
       featured: project.featured,
       published: project.published,
@@ -59,7 +62,7 @@ export default function ProjectForm({ project }: ProjectFormProps) {
         return;
       }
 
-      toast.success("Project updated");
+      toast.success("Project updated successfully");
       router.push("/dashboard/projects");
     });
   }
@@ -68,8 +71,9 @@ export default function ProjectForm({ project }: ProjectFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 max-w-xl"
+        className="space-y-8 max-w-xl"
       >
+        {/* PROJECT NAME */}
         <FormField
           control={form.control}
           name="name"
@@ -84,6 +88,7 @@ export default function ProjectForm({ project }: ProjectFormProps) {
           )}
         />
 
+        {/* ROLE */}
         <FormField
           control={form.control}
           name="role"
@@ -98,6 +103,7 @@ export default function ProjectForm({ project }: ProjectFormProps) {
           )}
         />
 
+        {/* SUMMARY */}
         <FormField
           control={form.control}
           name="summary"
@@ -112,6 +118,7 @@ export default function ProjectForm({ project }: ProjectFormProps) {
           )}
         />
 
+        {/* KEY FEATURES */}
         <FormField
           control={form.control}
           name="keyFeatures"
@@ -136,6 +143,112 @@ export default function ProjectForm({ project }: ProjectFormProps) {
             </FormItem>
           )}
         />
+
+        {/* TECH STACK */}
+        <FormField
+          control={form.control}
+          name="techStack"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tech Stack (comma separated)</FormLabel>
+              <FormControl>
+                <Input
+                  value={field.value.join(", ")}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value
+                        .split(",")
+                        .map((t) => t.trim())
+                        .filter(Boolean)
+                    )
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* LIVE URL */}
+        <FormField
+          control={form.control}
+          name="liveUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Live URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://…" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* REPO URL */}
+        <FormField
+          control={form.control}
+          name="repoUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Repository URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://github.com/…" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* FLAGS */}
+        <div className="space-y-3">
+          <FormField
+            control={form.control}
+            name="isFlagship"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Flagship Project</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="featured"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Featured</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="published"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Published</FormLabel>
+              </FormItem>
+            )}
+          />
+        </div>
 
         <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Update Project"}

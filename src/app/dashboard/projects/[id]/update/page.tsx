@@ -3,19 +3,21 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function EditProjectPage({ params }: Props) {
+  const projectId = (await params).id;
+
   const project = await prisma.project.findUnique({
-    where: { id: params.id },
+    where: { id: projectId },
   });
 
   if (!project) return notFound();
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">Edit Project</h1>
+      <h1 className="text-xl font-semibold">Update Project</h1>
       <ProjectForm project={project} />
     </div>
   );
