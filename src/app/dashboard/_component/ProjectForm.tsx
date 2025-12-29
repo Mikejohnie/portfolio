@@ -40,9 +40,10 @@ export default function ProjectForm({ project }: ProjectFormProps) {
       name: project.name,
       role: project.role,
       summary: project.summary,
+      description: project.description ?? "",
 
-      keyFeatures: project.keyFeatures,
-      techStack: project.techStack,
+      keyFeatures: project.keyFeatures.join("\n") ?? [],
+      techStack: project.techStack ?? [],
 
       liveUrl: project.liveUrl ?? "",
       repoUrl: project.repoUrl ?? "",
@@ -128,15 +129,11 @@ export default function ProjectForm({ project }: ProjectFormProps) {
               <FormControl>
                 <Textarea
                   rows={4}
-                  value={field.value.join("\n")}
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value
-                        .split("\n")
-                        .map((f) => f.trim())
-                        .filter(Boolean)
-                    )
-                  }
+                  {...field}
+                  placeholder={`Modern dashboard UI
+Role-based access
+Permission-based access
+`}
                 />
               </FormControl>
               <FormMessage />
