@@ -40,3 +40,25 @@ export type ProjectDB = {
 };
 
 export type ProjectUI = ProjectDB;
+
+export type AboutDB = {
+  id: string;
+  fullName: string;
+  headline: string;
+  shortBio: string;
+  longBio: string | null;
+
+  profileImage: string | null;
+  heroImage: string | null;
+  location: string | null;
+  email: string | null;
+  phone: string | null;
+
+  highlights: { label: string; value: string }[];
+  skills: string[];
+
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type AboutUI = AboutDB;

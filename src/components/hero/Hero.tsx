@@ -3,6 +3,12 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Hero = () => {
+  //   const about = await getAbout();
+  // <h1>I’m {about.fullName}</h1>
+  // <h2>{about.headline}</h2>
+  // <p>{about.shortBio}</p>
+  // <img src={about.heroImage} />
+
   return (
     <section className="relative overflow-hidden py-6 mx-auto max-w-6xl px-6">
       {/* BACKGROUND GLOW */}

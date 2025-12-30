@@ -10,7 +10,7 @@ import {
   updateProjectSchema,
   UpdateProjectSchemaType,
 } from "@/lib/zodValidation";
-import { updateProject } from "@/actions/actions";
+import { updateProject } from "@/actions/projectActions";
 import { ProjectUI } from "@/lib/types";
 
 import {

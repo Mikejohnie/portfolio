@@ -116,3 +116,27 @@ export type createProjectSchemaType = z.infer<typeof createProjectSchema>;
 export const updateProjectSchema = createProjectSchema.extend({});
 
 export type UpdateProjectSchemaType = z.infer<typeof updateProjectSchema>;
+
+//about
+export const highlightSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+});
+
+export const aboutSchema = z.object({
+  fullName: z.string().min(2),
+  headline: z.string().min(2),
+  shortBio: z.string().min(5),
+  longBio: z.string().optional(),
+
+  profileImage: z.string().url().optional(),
+  heroImage: z.string().url().optional(),
+  location: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+
+  highlights: z.array(highlightSchema),
+  skills: z.array(z.string()),
+});
+
+export type AboutSchemaType = z.infer<typeof aboutSchema>;

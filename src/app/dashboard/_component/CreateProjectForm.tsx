@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { createProject } from "@/actions/actions";
+import { createProject } from "@/actions/projectActions";
 import {
   createProjectSchema,
   createProjectSchemaType,

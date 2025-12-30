@@ -15,7 +15,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteProject } from "@/actions/actions";
+import { deleteProject } from "@/actions/projectActions";
 
 export function DeleteProjectModal({ projectId }: { projectId: string }) {
   const [isPending, startTransition] = useTransition();
