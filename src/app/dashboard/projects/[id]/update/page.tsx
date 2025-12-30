@@ -1,6 +1,5 @@
 import ProjectForm from "@/app/dashboard/_component/ProjectForm";
 import { getProjectForEdit } from "@/components/helper/data";
-import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 interface Props {

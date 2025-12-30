@@ -9,6 +9,12 @@ export default async function ProjectsPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  const normalized = projects.map((p) => ({
+    ...p,
+    keyFeatures: p.keyFeatures ?? [],
+    techStack: (p.techStack ?? []) as { key: string; value: string }[],
+  }));
+
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
@@ -25,12 +31,12 @@ export default async function ProjectsPage() {
 
       {/* DESKTOP */}
       <div className="hidden md:block">
-        <ProjectsTable projects={projects} />
+        <ProjectsTable projects={normalized} />
       </div>
 
       {/* MOBILE */}
       <div className="md:hidden">
-        <ProjectsCards projects={projects} />
+        <ProjectsCards projects={normalized} />
       </div>
     </div>
   );
