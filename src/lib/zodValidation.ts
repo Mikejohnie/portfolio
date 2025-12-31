@@ -118,7 +118,7 @@ export const updateProjectSchema = createProjectSchema.extend({});
 export type UpdateProjectSchemaType = z.infer<typeof updateProjectSchema>;
 
 //about
-export const highlightSchema = z.object({
+export const skillsSchema = z.object({
   label: z.string().min(1),
   value: z.string().min(1),
 });
@@ -126,6 +126,7 @@ export const highlightSchema = z.object({
 export const aboutSchema = z.object({
   fullName: z.string().min(2),
   headline: z.string().min(2),
+  subHeadline: z.string().min(2),
   shortBio: z.string().min(5),
   longBio: z.string().optional(),
 
@@ -135,8 +136,8 @@ export const aboutSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
 
-  highlights: z.array(highlightSchema),
-  skills: z.array(z.string()),
+  skills: z.array(skillsSchema),
+  highlights: z.string().min(1),
 });
 
 export type AboutSchemaType = z.infer<typeof aboutSchema>;

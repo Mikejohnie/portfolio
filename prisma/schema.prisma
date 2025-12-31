@@ -142,11 +142,12 @@ enum ContactSource {
 }
 
 model About {
-  id       String  @id @default(cuid())
-  fullName String
-  headline String // e.g. "Full-Stack Web Developer"
-  shortBio String // Hero summary (1 sentence)
-  longBio  String? // Full about details section
+  id          String  @id @default(cuid())
+  fullName    String
+  headline    String // e.g. "Full-Stack Web Developer"
+  subHeadline String 
+  shortBio    String // Hero summary (1 sentence)
+  longBio     String? // Full about details section
 
   profileImage String?
   heroImage    String?
@@ -154,8 +155,8 @@ model About {
   email        String?
   phone        String?
 
-  highlights Json @default("[]") // e.g. [{label:"Experience", value:"3+ years"}]
-  skills     Json @default("[]") // e.g. ["Next.js","Prisma","Stripe"]
+  highlights String[] @default([]) // e.g. [{label:"Experience", value:"3+ years"}]
+  skills     Json     @default("[]") // e.g. ["Next.js","Prisma","Stripe"]
 
   createdById String
   createdBy   User   @relation(fields: [createdById], references: [id])

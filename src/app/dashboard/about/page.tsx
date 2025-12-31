@@ -1,13 +1,8 @@
-import { getAbout } from "@/actions/aboutActions";
-import AboutForm from "../_component/AboutForm";
+import { getPublicAbout } from "@/components/helper/getPublicAbout";
+import CreateAboutForm from "../_component/CreateAboutForm";
 
-export default async function AboutPage() {
-  const about = await getAbout();
+export default async function Page() {
+  const about = await getPublicAbout();
 
-  return (
-    <div className="space-y-6">
-      <h1 className="text-xl font-semibold">About Settings</h1>
-      <AboutForm about={about} />
-    </div>
-  );
+  return <div>{about ? "Edit About" : <CreateAboutForm />}</div>;
 }

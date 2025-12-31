@@ -25,6 +25,7 @@ import {
   Settings,
   LogOut,
   User,
+  User2,
 } from "lucide-react";
 import { UserDTO } from "@/lib/types";
 import { useLogout } from "@/hooks/useLogout";
@@ -36,6 +37,11 @@ const mobileLinks = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    label: "About Me",
+    href: "/dashboard/about",
+    icon: User2,
   },
   {
     label: "Projects",

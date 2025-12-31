@@ -54,8 +54,8 @@ export type AboutDB = {
   email: string | null;
   phone: string | null;
 
-  highlights: { label: string; value: string }[];
-  skills: string[];
+  skills: { label: string; value: string }[];
+  highlights: string[];
 
   createdAt: Date;
   updatedAt: Date;

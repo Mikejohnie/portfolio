@@ -5,7 +5,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { AboutSchemaType, aboutSchema } from "@/lib/zodValidation";
+import { aboutSchema, AboutSchemaType } from "@/lib/zodValidation";
 import { saveAbout } from "@/actions/aboutActions";
 
 import {
@@ -20,58 +20,47 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { AboutUI } from "@/lib/types";
 
-type Props = {
-  about: AboutUI | null;
-};
-
-export default function AboutForm({ about }: Props) {
+export default function CreateAboutForm() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<AboutSchemaType>({
     resolver: zodResolver(aboutSchema),
     defaultValues: {
-      fullName: about?.fullName ?? "",
-      headline: about?.headline ?? "",
-      shortBio: about?.shortBio ?? "",
-      longBio: about?.longBio ?? "",
+      fullName: "",
+      headline: "",
+      subHeadline: "",
 
-      profileImage: about?.profileImage ?? "",
-      heroImage: about?.heroImage ?? "",
-      location: about?.location ?? "",
-      email: about?.email ?? "",
-      phone: about?.phone ?? "",
+      shortBio: "",
+      longBio: "",
 
-      highlights: about?.highlights ?? [],
-      skills: about?.skills ?? [],
+      profileImage: "",
+      heroImage: "",
+      location: "",
+      email: "",
+      phone: "",
+
+      highlights: "",
+      skills: [],
     },
   });
-
-  const {
-    fields: highlightFields,
-    append: addHighlight,
-    remove: removeHighlight,
-  } = useFieldArray({ control: form.control, name: "highlights" });
 
   const {
     fields: skillFields,
     append: addSkill,
     remove: removeSkill,
-  } = useFieldArray({ control: form.control, name: "skills" });
+  } = useFieldArray<AboutSchemaType, "skills">({
+    control: form.control,
+    name: "skills",
+  });
 
   const onSubmit = (values: AboutSchemaType) => {
     startTransition(() => {
-      (async () => {
+      async () => {
         const res = await saveAbout(values);
-
-        if (res?.error) {
-          toast.error(res.error);
-          return;
-        }
-
-        toast.success("About saved!");
-      })();
+        if (res?.error) return toast.error(res.error);
+        toast.success("About created!");
+      };
     });
   };
 
@@ -89,7 +78,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="John Doe" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,9 +91,23 @@ export default function AboutForm({ about }: Props) {
           name="headline"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Headline</FormLabel>
+              <FormLabel>Headline (Hero)</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="Full-Stack Developer" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* subHEADLINE */}
+        <FormField
+          control={form.control}
+          name="subHeadline"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>SubHeadline</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="I'm a full-stack web dev..." />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -117,9 +120,13 @@ export default function AboutForm({ about }: Props) {
           name="shortBio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Short Bio</FormLabel>
+              <FormLabel>Short Bio (Hero)</FormLabel>
               <FormControl>
-                <Textarea rows={3} {...field} />
+                <Textarea
+                  rows={3}
+                  placeholder="I design and build scalable apps..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,7 +141,11 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Long Bio</FormLabel>
               <FormControl>
-                <Textarea rows={5} {...field} />
+                <Textarea
+                  rows={5}
+                  placeholder="Tell your journey, achievements, etc."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -149,7 +160,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Profile Image URL</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="https://..." />
+                <Input {...field} placeholder="https://your-photo.jpg" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -163,7 +174,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Hero Image URL</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="https://..." />
+                <Input {...field} placeholder="https://banner-image.png" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -178,7 +189,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="City, Country" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -192,7 +203,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" {...field} />
+                <Input type="email" {...field} placeholder="you@email.com" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -206,7 +217,7 @@ export default function AboutForm({ about }: Props) {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="+1 555-555-5555" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -214,37 +225,24 @@ export default function AboutForm({ about }: Props) {
         />
 
         {/* HIGHLIGHTS */}
-        <FormItem>
-          <FormLabel>Highlights</FormLabel>
-          <div className="space-y-3">
-            {highlightFields.map((field, index) => (
-              <div key={field.id} className="flex gap-2">
-                <Input
-                  {...form.register(`highlights.${index}.label`)}
-                  placeholder="Label"
+        <FormField
+          control={form.control}
+          name="highlights"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Highlights</FormLabel>
+              <FormControl>
+                <Textarea
+                  rows={4}
+                  placeholder={`work experience
+`}
+                  {...field}
                 />
-                <Input
-                  {...form.register(`highlights.${index}.value`)}
-                  placeholder="Value"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => removeHighlight(index)}
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => addHighlight({ label: "", value: "" })}
-            >
-              <Plus className="h-4 w-4" /> Add
-            </Button>
-          </div>
-        </FormItem>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* SKILLS */}
         <FormItem>
@@ -253,8 +251,12 @@ export default function AboutForm({ about }: Props) {
             {skillFields.map((field, index) => (
               <div key={field.id} className="flex gap-2">
                 <Input
-                  {...form.register(`skills.${index}`)}
-                  placeholder="Skill..."
+                  {...form.register(`skills.${index}.label`)}
+                  placeholder="Category (e.g. Frontend)"
+                />
+                <Input
+                  {...form.register(`skills.${index}.value`)}
+                  placeholder="Value (e.g. Next.js)"
                 />
                 <Button
                   type="button"
@@ -270,13 +272,13 @@ export default function AboutForm({ about }: Props) {
               variant="secondary"
               onClick={() => addSkill({ label: "", value: "" })}
             >
-              <Plus className="h-4 w-4" /> Add
+              <Plus className="h-4 w-4" /> Add Skill
             </Button>
           </div>
         </FormItem>
 
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving..." : "Save About"}
+          {isPending ? "Saving..." : "Create About"}
         </Button>
       </form>
     </Form>

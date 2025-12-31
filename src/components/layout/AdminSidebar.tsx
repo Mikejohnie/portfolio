@@ -3,13 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, FolderKanban, Mail, BarChart3 } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Mail,
+  BarChart3,
+  User2,
+} from "lucide-react";
 
 const sidebarLinks = [
   {
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    label: "About Me",
+    href: "/dashboard/about",
+    icon: User2,
   },
   {
     label: "Projects",
