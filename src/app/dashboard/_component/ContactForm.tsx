@@ -58,10 +58,12 @@ export default function ContactForm({ initialData }: Props) {
       email: initialData.email,
       phone: initialData.phone,
       location: initialData.location,
+
       github: initialData.github ?? "",
       linkedin: initialData.linkedin ?? "",
       twitter: initialData.twitter ?? "",
       website: initialData.website ?? "",
+
       openToRelocation: initialData.openToRelocation,
       availableForWork: initialData.availableForWork,
     });

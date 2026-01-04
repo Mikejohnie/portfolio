@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { getPublicAbout } from "../helper/getPublicAbout";
+import { AboutUI } from "@/lib/types";
 
-const Hero = async () => {
-  const about = await getPublicAbout();
+type Props = {
+  about: AboutUI;
+};
 
-  if (!about) return null;
-
+const Hero = ({ about }: Props) => {
   const skillsStack = about.skills?.map((s) => s.name) ?? [];
 
   const MOBILE_VISIBLE = 4;

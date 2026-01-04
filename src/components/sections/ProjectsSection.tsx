@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getPublicProjects } from "@/components/helper/getPublicProjects";
+import { ProjectUI } from "@/lib/types";
 
-const ProjectsSection = async () => {
-  const projects = await getPublicProjects();
+type Props = {
+  project: ProjectUI[];
+};
+
+const ProjectsSection = ({ project }: Props) => {
   return (
     <section className="mx-auto max-w-5xl px-6 space-y-18">
       {/* HEADER */}
@@ -16,7 +19,7 @@ const ProjectsSection = async () => {
       </header>
 
       {/* PROJECTS */}
-      {projects.map((project) => (
+      {project.map((project) => (
         <div key={project.id} className="rounded-2xl border p-8 space-y-8">
           {/* TITLE */}
           <div className="space-y-2">
@@ -89,7 +92,7 @@ const ProjectsSection = async () => {
         </div>
       ))}
 
-      {projects.length === 0 && (
+      {project.length === 0 && (
         <p className="text-muted-foreground text-center">
           No projects published yet.
         </p>

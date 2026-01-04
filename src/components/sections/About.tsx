@@ -1,16 +1,12 @@
 import Image from "next/image";
 import ResumeButton from "@/components/home/ResumeButton";
-import { getPublicAbout } from "@/components/helper/getPublicAbout";
-import { getPublicProjects } from "../helper/getPublicProjects";
+import { AboutUI, ProjectUI } from "@/lib/types";
+type Props = {
+  about: AboutUI;
+  project: ProjectUI[];
+};
 
-export default async function AboutSection() {
-  const about = await getPublicAbout();
-
-  if (!about) return null;
-
-  const project = await getPublicProjects();
-  if (!project) return null;
-
+const AboutSection = ({ about, project }: Props) => {
   const keyWords = [
     { text: about.fullName, highlightStyle: "" },
     { text: about.headline, highlightStyle: "" },
@@ -67,7 +63,7 @@ export default async function AboutSection() {
               <p key={i}>{paragraph}</p>
             ))}
 
-          {about.resume?.url && <ResumeButton resumeUrl={about.resume.url} />}
+          {about.resume?.url && <ResumeButton resumeUrl={about?.resume?.url} />}
         </div>
       </section>
 
@@ -120,4 +116,6 @@ export default async function AboutSection() {
       )}
     </section>
   );
-}
+};
+
+export default AboutSection;

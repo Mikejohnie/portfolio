@@ -20,10 +20,7 @@ export async function saveContact(values: ContactSchemaType) {
     email,
     phone,
     location,
-    github,
-    linkedin,
-    twitter,
-    website,
+
     openToRelocation,
     availableForWork,
   } = parsed.data;

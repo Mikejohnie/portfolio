@@ -1,99 +1,130 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import ResumeButton from "@/components/home/ResumeButton";
+import { Mail, MapPin, Github, Linkedin, Globe, Download } from "lucide-react";
+import ResumeButton from "../home/ResumeButton";
+import { ContactUI } from "@/lib/types";
 
-const ContactSection = () => {
+type Props = {
+  contact: ContactUI;
+  resumeUrl?: string;
+};
+
+export default function ContactSection({ contact, resumeUrl }: Props) {
   return (
-    <section className="mx-auto max-w-4xl px-6  space-y-16">
+    <section id="contact" className="mx-auto max-w-5xl px-6 space-y-16">
       {/* HEADER */}
-      <header className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold">Get in Touch</h1>
-        <p className="text-muted-foreground text-lg max-w-2xl">
-          Interested in working together or learning more about my work? I’m
-          open to full-time roles, contract work, and collaborative projects.
+      <header className="space-y-4 max-w-2xl">
+        <h2 className="text-3xl md:text-4xl font-bold">Let’s work together</h2>
+        <p className="text-muted-foreground text-lg">
+          I’m open to full-time roles, contract work, and collaborative
+          projects. If you’re hiring or have an opportunity, I’d love to hear
+          from you.
         </p>
       </header>
 
-      {/* MAIN CONTENT */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* LEFT — MESSAGE */}
-        <div className="space-y-6 text-muted-foreground leading-relaxed">
-          <p>
-            I enjoy working on meaningful products that require thoughtful
-            system design, clean architecture, and modern web technologies.
-          </p>
+      {/* AVAILABILITY */}
+      <div className="flex flex-wrap gap-3">
+        {contact.availableForWork && (
+          <span className="rounded-full bg-green-500/10 text-green-600 px-4 py-1 text-sm">
+            Open to work
+          </span>
+        )}
 
-          <p>
-            If you’re a recruiter, hiring manager, or founder looking for a
-            Full-Stack Developer, feel free to reach out. I’m happy to discuss
-            how my skills and experience could fit your team.
-          </p>
+        {contact.openToRelocation && (
+          <span className="rounded-full bg-blue-500/10 text-blue-600 px-4 py-1 text-sm">
+            Open to relocation
+          </span>
+        )}
 
-          <div className="flex flex-wrap gap-4 pt-4">
-            <ResumeButton />
-            <Button asChild variant="outline">
-              <Link href="mailto:your@email.com">Email Me</Link>
-            </Button>
+        {contact.location && (
+          <span className="flex items-center gap-2 rounded-full border px-4 py-1 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            {contact.location}
+          </span>
+        )}
+      </div>
+
+      {/* CONTACT METHODS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* EMAIL */}
+        <div className="rounded-xl border p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <Mail className="h-5 w-5 text-blue-500" />
+            <h3 className="font-medium text-lg">Email</h3>
           </div>
+
+          <p className="text-muted-foreground text-sm">
+            Best way to reach me for roles, interviews, or collaboration.
+          </p>
+
+          <Link
+            href={`mailto:${contact.email}`}
+            className="text-blue-600 font-medium hover:underline"
+          >
+            {contact.email}
+          </Link>
         </div>
 
-        {/* RIGHT — CONTACT DETAILS */}
-        <div className="rounded-2xl border p-8 space-y-6">
-          <h2 className="text-xl font-semibold">Contact Details</h2>
-
-          <div className="space-y-4 text-muted-foreground">
-            <div>
-              <p className="text-sm">Email</p>
-              <a
-                href="mailto: nkumichael1@gmail.com"
-                className="font-medium text-foreground hover:underline"
-              >
-                nkumichael1@gmail.com
-              </a>
-            </div>
-
-            <div>
-              <p className="text-sm">LinkedIn</p>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-foreground hover:underline"
-              >
-                linkedin.com/in/yourprofile
-              </a>
-            </div>
-
-            <div>
-              <p className="text-sm">GitHub</p>
-              <a
-                href="https://github.com/michaelnku
-"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-foreground hover:underline"
-              >
-                github.com/michaelnku
-              </a>
-            </div>
-
-            <div>
-              <p className="text-sm">Location</p>
-              <p className="font-medium text-foreground">
-                📍 Nigeria · Open to Remote & International Roles
-              </p>
-            </div>
+        {/* LOCATION */}
+        <div className="rounded-xl border p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <MapPin className="h-5 w-5 text-purple-500" />
+            <h3 className="font-medium text-lg">Location</h3>
           </div>
+
+          <p className="text-muted-foreground text-sm">Currently based in:</p>
+
+          <p className="font-medium">{contact.location}</p>
         </div>
       </div>
 
-      {/* CLOSING CTA */}
-      <div className="border-t pt-10 text-center space-y-4">
-        <p className="text-muted-foreground">Prefer a quick overview?</p>
-        <ResumeButton />
+      {/* CTA BUTTONS */}
+      <div className="flex flex-wrap gap-4">
+        <Button asChild size="lg">
+          <Link href={`mailto:${contact.email}`}>
+            <Mail className="mr-2 h-4 w-4" />
+            Contact Me
+          </Link>
+        </Button>
+
+        {resumeUrl && <ResumeButton resumeUrl={resumeUrl} />}
+      </div>
+
+      {/* SOCIAL LINKS */}
+      <div className="flex flex-wrap gap-6 pt-6">
+        {contact.github && (
+          <Link
+            href={contact.github}
+            target="_blank"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
+          >
+            <Github className="h-5 w-5" />
+            GitHub
+          </Link>
+        )}
+
+        {contact.linkedin && (
+          <Link
+            href={contact.linkedin}
+            target="_blank"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
+          >
+            <Linkedin className="h-5 w-5" />
+            LinkedIn
+          </Link>
+        )}
+
+        {contact.website && (
+          <Link
+            href={contact.website}
+            target="_blank"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
+          >
+            <Globe className="h-5 w-5" />
+            Website
+          </Link>
+        )}
       </div>
     </section>
   );
-};
-
-export default ContactSection;
+}
