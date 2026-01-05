@@ -17,7 +17,7 @@ export default function AnalyticsCards({ data }: Props) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <Card>
+      <Card className="hover:shadow-md">
         <CardHeader>
           <CardTitle>Total Visitors</CardTitle>
         </CardHeader>
@@ -26,7 +26,7 @@ export default function AnalyticsCards({ data }: Props) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="hover:shadow-md">
         <CardHeader>
           <CardTitle>Resume Downloads</CardTitle>
         </CardHeader>
@@ -35,7 +35,7 @@ export default function AnalyticsCards({ data }: Props) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="hover:shadow-md">
         <CardHeader>
           <CardTitle>Hire Requests</CardTitle>
         </CardHeader>
