@@ -152,7 +152,8 @@ export default function LoginForm() {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full h-11 dark:bg-neutral-900 rounded-lg font-semibold text-white shadow-md transition disabled:opacity-70"
+              variant={"secondary"}
+              className="w-full h-11 rounded-lg font-semibold text-white shadow-md transition disabled:opacity-70"
             >
               {isPending ? (
                 <span className="inline-flex gap-2 items-center">
