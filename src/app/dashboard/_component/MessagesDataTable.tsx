@@ -28,9 +28,15 @@ import { useState } from "react";
 
 type Props = {
   messages: MessageUI[];
+  onRowClick: (msg: MessageUI) => void;
+  selectedId?: string;
 };
 
-export default function MessagesDataTable({ messages }: Props) {
+export default function MessagesDataTable({
+  messages,
+  onRowClick,
+  selectedId,
+}: Props) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -56,7 +62,7 @@ export default function MessagesDataTable({ messages }: Props) {
     <div className="space-y-4">
       {/* FILTER */}
       <Input
-        placeholder="Filter by email..."
+        placeholder="Filter by sender name..."
         value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
         onChange={(e) =>
           table.getColumn("name")?.setFilterValue(e.target.value)
@@ -87,8 +93,13 @@ export default function MessagesDataTable({ messages }: Props) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className={!row.original.read ? "bg-blue-500/5" : ""}
+                  onClick={() => onRowClick(row.original)}
+                  className={`
+                    cursor-pointer transition
+                    hover:bg-muted
+                     ${row.original.id === selectedId ? "bg-muted" : ""}
+                    ${!row.original.read ? "bg-blue-500/5" : ""}
+                  `}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

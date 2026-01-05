@@ -1,6 +1,5 @@
 import { getAdminMessages } from "@/components/helper/getAdminMessages";
-import MessagesCard from "../_component/MessagesCards";
-import MessagesDataTable from "../_component/MessagesDataTable";
+import MessagesClient from "../_component/MessagesClient";
 
 export default async function MessagesPage() {
   const rawMessages = await getAdminMessages();
@@ -23,19 +22,7 @@ export default async function MessagesPage() {
         </p>
       </header>
 
-      {messages.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No messages yet.</p>
-      ) : (
-        <>
-          <div className="hidden md:block">
-            <MessagesDataTable messages={messages} />
-          </div>
-
-          <div className="md:hidden">
-            <MessagesCard messages={messages} />
-          </div>
-        </>
-      )}
+      <MessagesClient messages={messages} />
     </div>
   );
 }

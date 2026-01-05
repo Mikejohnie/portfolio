@@ -9,18 +9,25 @@ import { toast } from "sonner";
 
 type Props = {
   messages: MessageUI[];
+  onSelect: (msg: MessageUI) => void;
+  selectedId?: string;
 };
 
-export default function MessagesCard({ messages }: Props) {
+export default function MessagesCard({
+  messages,
+  onSelect,
+  selectedId,
+}: Props) {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="space-y-4">
       {messages.map((msg) => (
         <div
+          onClick={() => onSelect(msg)}
           key={msg.id}
-          className={`rounded-xl border p-4 space-y-3 ${
-            !msg.read ? "bg-blue-500/5 border-blue-500/20" : ""
-          }`}
+          className={`rounded-xl border p-4 space-y-3 cursor-pointer transition hover:bg-muted   ${
+            msg.id === selectedId ? "bg-muted" : ""
+          } ${!msg.read ? "bg-blue-500/5 border-blue-500/20" : ""}`}
         >
           {/* HEADER */}
           <div className="flex items-start justify-between gap-4">
