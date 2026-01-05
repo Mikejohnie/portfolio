@@ -25,6 +25,19 @@ export default async function AccountPage() {
     { label: "Published project", done: projects.length > 0 },
   ];
 
+  const completenessItems = [
+    { done: !!about, weight: 20 },
+    { done: !!about?.resume, weight: 20 },
+    { done: !!contact, weight: 20 },
+    { done: projects.length > 0, weight: 30 },
+    { done: !!about?.profileImage, weight: 10 },
+  ];
+
+  const profileCompleteness = completenessItems.reduce(
+    (acc, item) => acc + (item.done ? item.weight : 0),
+    0
+  );
+
   return (
     <div className="space-y-8 max-w-5xl">
       {/* HEADER */}
@@ -81,6 +94,27 @@ export default async function AccountPage() {
             <Button asChild>
               <Link href="/dashboard/analytics">View Analytics</Link>
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* PROFILE COMPLETENESS */}
+      <Card>
+        <CardContent className="pt-6 space-y-4">
+          <h2 className="font-medium">Profile Completeness</h2>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">
+              Complete your profile to improve recruiter trust
+            </span>
+            <span className="font-semibold">{profileCompleteness}%</span>
+          </div>
+
+          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full bg-blue-500 transition-all"
+              style={{ width: `${profileCompleteness}%` }}
+            />
           </div>
         </CardContent>
       </Card>
