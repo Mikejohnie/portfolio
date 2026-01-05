@@ -54,6 +54,8 @@ export type AboutDB = {
   shortBio: string;
   longBio: string;
 
+  portfolioStartYear: number;
+
   profileImage?: UploadedFile | null;
   heroImage?: UploadedFile | null;
   resume?: UploadedFile | null;

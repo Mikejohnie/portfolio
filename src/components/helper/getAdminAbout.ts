@@ -24,6 +24,7 @@ export async function getAdminAbout(): Promise<AboutUI | null> {
     subHeadline: about.subHeadline,
     shortBio: about.shortBio,
     longBio: about.longBio,
+    portfolioStartYear: about.portfolioStartYear,
 
     profileImage: about.profileImage as UploadedFile | undefined,
     heroImage: about.heroImage as UploadedFile | undefined,

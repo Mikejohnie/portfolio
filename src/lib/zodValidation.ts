@@ -1,4 +1,4 @@
-import z, { boolean } from "zod";
+import z from "zod";
 
 //register a user
 export const registerSchema = z
@@ -123,9 +123,9 @@ export const skillSchema = z.object({
 });
 
 export const experienceItemSchema = z.object({
-  year: z.string().min(2), // "2024 – Present"
-  title: z.string().min(2), // "Full-Stack Web Developer"
-  context: z.string().optional(), // "Creator — NexaMart Marketplace"
+  year: z.string().min(2),
+  title: z.string().min(2),
+  context: z.string().optional(),
   description: z.string().min(10),
 });
 
@@ -136,12 +136,20 @@ export const fileSchema = z
   })
   .optional();
 
+const currentYear = new Date().getFullYear();
+
 export const aboutSchema = z.object({
-  fullName: z.string().min(2),
+  fullName: z.string().min(2, "Full name must be at least 2 characters."),
   headline: z.string().min(2),
   subHeadline: z.string().min(2),
   shortBio: z.string().min(5),
   longBio: z.string().min(1),
+
+  portfolioStartYear: z
+    .number()
+    .int("Must be an integer")
+    .min(1900, "Year must be >= 1900")
+    .max(currentYear, `Year cannot be after ${currentYear}`),
 
   experience: z.array(experienceItemSchema),
 

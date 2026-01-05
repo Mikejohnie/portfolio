@@ -53,6 +53,8 @@ export default function CreateAboutForm({ initialData }: Props) {
       experience: initialData?.experience ?? [],
       skills: initialData?.skills ?? [],
 
+      portfolioStartYear: initialData?.portfolioStartYear ?? undefined,
+
       profileImage: initialData?.profileImage ?? undefined,
       heroImage: initialData?.heroImage ?? undefined,
       resume: initialData?.resume ?? undefined,
@@ -91,6 +93,7 @@ export default function CreateAboutForm({ initialData }: Props) {
       subHeadline: initialData.subHeadline,
       shortBio: initialData.shortBio,
       longBio: initialData.longBio,
+      portfolioStartYear: initialData.portfolioStartYear,
 
       experience: initialData.experience ?? [],
       skills: initialData.skills ?? [],
@@ -192,7 +195,7 @@ export default function CreateAboutForm({ initialData }: Props) {
 
           {/* HEADLINE */}
           <FormField
-            control={form.control}
+            control={control}
             name="headline"
             render={({ field }) => (
               <FormItem>
@@ -250,6 +253,27 @@ export default function CreateAboutForm({ initialData }: Props) {
                     rows={3}
                     placeholder="I focus on building systems..."
                     {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
+            name="portfolioStartYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Portfolio Start Year</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={1900}
+                    max={new Date().getFullYear()}
+                    placeholder="1900"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
                 <FormMessage />

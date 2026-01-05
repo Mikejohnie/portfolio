@@ -34,6 +34,7 @@ export async function saveAbout(values: AboutSchemaType) {
 
     experience,
     skills,
+    portfolioStartYear,
 
     profileImage,
     heroImage,
@@ -53,6 +54,7 @@ export async function saveAbout(values: AboutSchemaType) {
       longBio,
       experience,
       skills,
+      portfolioStartYear,
 
       profileImage,
       heroImage,
@@ -69,6 +71,7 @@ export async function saveAbout(values: AboutSchemaType) {
       longBio,
       experience,
       skills,
+      portfolioStartYear,
 
       profileImage,
       heroImage,

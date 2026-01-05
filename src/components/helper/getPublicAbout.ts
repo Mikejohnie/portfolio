@@ -15,6 +15,7 @@ export async function getPublicAbout(): Promise<AboutUI | null> {
     subHeadline: about.subHeadline,
     shortBio: about.shortBio,
     longBio: about.longBio,
+    portfolioStartYear: about.portfolioStartYear,
 
     experience: about.experience as AboutUI["experience"],
     skills: about.skills as AboutUI["skills"],
