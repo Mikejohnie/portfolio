@@ -224,7 +224,7 @@ export default function RegisterForm() {
             <Button
               disabled={isPending}
               type="submit"
-              className="w-full h-11 rounded-lg font-semibold text-white bg-black shadow-md bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-hover)] transition disabled:opacity-70"
+              className="w-full h-11 rounded-lg font-semibold text-white bg-black shadow-md transition disabled:opacity-70"
             >
               {isPending ? "Creating account..." : "Create your account"}
             </Button>
