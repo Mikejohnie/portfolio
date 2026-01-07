@@ -1,7 +1,10 @@
+"use client";
+
 import { ProjectUI } from "@/lib/types";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FolderOpen } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   Empty,
   EmptyHeader,
@@ -10,14 +13,24 @@ import {
   EmptyMedia,
   EmptyContent,
 } from "@/components/ui/empty";
+import ProjectCard from "../projects/ProjectCard";
 
 type Props = {
   project: ProjectUI[];
 };
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
 const ProjectsSection = ({ project }: Props) => {
   return (
-    <section id="projects" className="mx-auto max-w-5xl px-6 space-y-20">
+    <section className="mx-auto max-w-5xl px-6 space-y-20">
       {/* HEADER */}
       <header className="space-y-4 max-w-2xl">
         <h1 className="text-3xl md:text-4xl font-bold">Selected Projects</h1>
@@ -29,106 +42,17 @@ const ProjectsSection = ({ project }: Props) => {
       </header>
 
       {/* PROJECT LIST */}
-      <div className="space-y-12">
+      <motion.div
+        className="space-y-12"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         {project.map((project) => (
-          <article
-            key={project.id}
-            className="rounded-2xl border p-8 space-y-10"
-          >
-            {/* TITLE + META */}
-            <header className="space-y-2">
-              <div className="flex flex-wrap items-center gap-3">
-                <h2 className="text-2xl font-semibold">{project.name}</h2>
-
-                {project.isFlagship && (
-                  <span className="rounded-full bg-blue-500/10 px-3 py-1 text-sm text-blue-600 hover:animate-pulse hover:shadow">
-                    Flagship Project
-                  </span>
-                )}
-
-                {!project.isFlagship && project.featured && (
-                  <span className="rounded-full border px-3 py-1 text-sm">
-                    Featured
-                  </span>
-                )}
-              </div>
-
-              <p className="text-sm text-muted-foreground">
-                Role: <span className="font-medium">{project.role}</span>
-              </p>
-            </header>
-
-            {/* OVERVIEW */}
-            <section className="space-y-2">
-              <h3 className="font-medium text-sm uppercase tracking-wide text-muted-foreground">
-                Overview
-              </h3>
-
-              <p className="text-muted-foreground leading-relaxed max-w-3xl">
-                {project.summary}
-              </p>
-            </section>
-
-            {/* KEY CONTRIBUTIONS */}
-            {project.keyFeatures.length > 0 && (
-              <section className="space-y-3">
-                <h3 className="font-medium text-sm uppercase tracking-wide text-muted-foreground">
-                  Key Contributions
-                </h3>
-
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                  {project.keyFeatures.map((feature, index) => (
-                    <li key={`${project.id}-${index}`}>• {feature}</li>
-                  ))}
-                </ul>
-              </section>
-            )}
-
-            {/* TECH STACK */}
-            {project.techStack.length > 0 && (
-              <section className="space-y-3">
-                <h3 className="font-medium text-sm uppercase tracking-wide text-muted-foreground">
-                  Technology Stack
-                </h3>
-
-                <ul className="flex flex-wrap gap-2 text-sm">
-                  {project.techStack.map((tech) => (
-                    <li
-                      key={tech.key}
-                      className="rounded-full border px-4 py-1 text-muted-foreground hover:shadow-md"
-                    >
-                      {tech.value}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-
-            {/* ACTIONS */}
-            <footer className="flex flex-wrap gap-4 pt-4">
-              {project.liveUrl && (
-                <Button asChild>
-                  <Link
-                    href={
-                      project.liveUrl.startsWith("http")
-                        ? project.liveUrl
-                        : `https://${project.liveUrl}`
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View Live Project
-                  </Link>
-                </Button>
-              )}
-
-              <Button variant="outline" asChild>
-                <Link href="#contact">Discuss This Project</Link>
-              </Button>
-            </footer>
-          </article>
+          <ProjectCard key={project.id} project={project} />
         ))}
-      </div>
+      </motion.div>
 
       {/* EMPTY STATE */}
       {project.length === 0 && (

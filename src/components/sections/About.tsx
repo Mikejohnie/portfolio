@@ -1,17 +1,53 @@
+"use client";
+
 import Image from "next/image";
 import ResumeButton from "@/components/home/ResumeButton";
 import { AboutUI } from "@/lib/types";
+import { motion, easeOut, type Variants } from "framer-motion";
 
 type Props = {
   about: AboutUI;
   resumeUrl?: string;
 };
 
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const sectionVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: easeOut,
+    },
+  },
+};
+
 export default function AboutSection({ about, resumeUrl }: Props) {
   return (
-    <section id="about" className="mx-auto max-w-5xl px-6 space-y-24">
+    <motion.section
+      className="mx-auto max-w-5xl px-6 space-y-20"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+    >
       {/* ===== INTRO / POSITIONING ===== */}
-      <header className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+      <motion.header
+        variants={sectionVariants}
+        className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center"
+      >
         {/* PROFILE IMAGE */}
         {about.profileImage?.url && (
           <div className="flex justify-center md:justify-start">
@@ -48,10 +84,13 @@ export default function AboutSection({ about, resumeUrl }: Props) {
             )}
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* ===== PROFESSIONAL BIO ===== */}
-      <section className="space-y-6 max-w-3xl">
+      <motion.section
+        variants={sectionVariants}
+        className="space-y-6 max-w-3xl"
+      >
         <h2 className="text-2xl font-semibold">Professional Summary</h2>
 
         <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -62,11 +101,11 @@ export default function AboutSection({ about, resumeUrl }: Props) {
               <p key={i}>{paragraph}</p>
             ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* ===== TECH STACK ===== */}
       {about.skills.length > 0 && (
-        <section className="space-y-6">
+        <motion.section variants={sectionVariants} className="space-y-6">
           <h2 className="text-2xl font-semibold">Technical Skills</h2>
 
           <div className="flex flex-wrap gap-3">
@@ -86,12 +125,12 @@ export default function AboutSection({ about, resumeUrl }: Props) {
               </span>
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* ===== EXPERIENCE ===== */}
       {about.experience.length > 0 && (
-        <section className="space-y-10">
+        <motion.section variants={sectionVariants} className="space-y-10">
           <h2 className="text-2xl font-semibold">
             Experience & Career Journey
           </h2>
@@ -119,8 +158,8 @@ export default function AboutSection({ about, resumeUrl }: Props) {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
-    </section>
+    </motion.section>
   );
 }

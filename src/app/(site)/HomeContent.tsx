@@ -5,6 +5,7 @@ import Hero from "@/components/hero/h";
 import { getPublicAbout } from "@/components/helper/getPublicAbout";
 import { getPublicContact } from "@/components/helper/getPublicContact";
 import { getPublicProjects } from "@/components/helper/getPublicProjects";
+import { Reveal } from "@/components/animations/Reveal";
 
 const HomeContent = async () => {
   const about = await getPublicAbout();
@@ -18,19 +19,27 @@ const HomeContent = async () => {
   return (
     <>
       <section id="home">
-        <Hero about={about} />
+        <Reveal>
+          <Hero about={about} />
+        </Reveal>
       </section>
 
       <section id="about" className="section-spacing">
-        <AboutSection about={about} resumeUrl={about?.resume?.url} />
+        <Reveal delay={0.1}>
+          <AboutSection about={about} resumeUrl={about?.resume?.url} />
+        </Reveal>
       </section>
 
       <section id="projects" className="section-spacing">
-        <ProjectsSection project={project} />
+        <Reveal delay={0.2}>
+          <ProjectsSection project={project} />
+        </Reveal>
       </section>
 
       <section id="contact" className="section-spacing">
-        <ContactSection contact={contact} resumeUrl={about?.resume?.url} />
+        <Reveal delay={0.3}>
+          <ContactSection contact={contact} resumeUrl={about?.resume?.url} />
+        </Reveal>
       </section>
     </>
   );

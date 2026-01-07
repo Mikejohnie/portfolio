@@ -11,7 +11,7 @@ type Props = {
 
 export default function ContactSection({ contact, resumeUrl }: Props) {
   return (
-    <section id="contact" className="mx-auto max-w-5xl px-6 space-y-16">
+    <section className="mx-auto max-w-5xl px-6 space-y-16">
       {/* HEADER */}
       <header className="space-y-4 max-w-2xl">
         <h2 className="text-3xl md:text-4xl font-bold">Let’s work together</h2>
