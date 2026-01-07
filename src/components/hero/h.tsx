@@ -1,8 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublicAbout } from "../helper/getPublicAbout";
 import { AboutUI } from "@/lib/types";
+import { useState } from "react";
 
 type Props = {
   about: AboutUI;
@@ -12,12 +14,11 @@ const Hero = ({ about }: Props) => {
   const skillsStack = about.skills?.map((s) => s.name) ?? [];
 
   const MOBILE_VISIBLE = 4;
-  const DESKTOP_VISIBLE = skillsStack.length;
+  const [showAllMobile, setShowAllMobile] = useState(false);
 
-  const visibleSkills =
-    DESKTOP_VISIBLE > MOBILE_VISIBLE
-      ? skillsStack.slice(0, MOBILE_VISIBLE)
-      : skillsStack;
+  const visibleSkills = showAllMobile
+    ? skillsStack
+    : skillsStack.slice(0, MOBILE_VISIBLE);
 
   const remainingCount = skillsStack.length - visibleSkills.length;
 
@@ -56,14 +57,22 @@ const Hero = ({ about }: Props) => {
             {about.shortBio}
           </p>
 
+          {/* TECH STACK */}
           <p className="text-sm text-muted-foreground">
-            Tech stack:{" "}
+            Tech stack: {/* MOBILE */}
             <span className="sm:hidden text-foreground/80 font-medium">
               {visibleSkills.join(" · ")}
-              {remainingCount > 0 && (
-                <span className="ml-1 ">· +{remainingCount} more</span>
+
+              {skillsStack.length > MOBILE_VISIBLE && (
+                <button
+                  onClick={() => setShowAllMobile((prev) => !prev)}
+                  className="ml-2 text-blue-500 hover:underline transition"
+                >
+                  {showAllMobile ? "Show less" : `+${remainingCount} more`}
+                </button>
               )}
             </span>
+            {/* DESKTOP */}
             <span className="hidden sm:inline text-foreground/80 font-medium">
               {skillsStack.join(" · ")}
             </span>
