@@ -1,11 +1,12 @@
 import ProjectsSection from "@/components/sections/ProjectsSection";
 import ContactSection from "@/components/sections/ContactSection";
-import AboutSection from "@/components/sections/About";
-import Hero from "@/components/hero/h";
+
 import { getPublicAbout } from "@/components/helper/getPublicAbout";
 import { getPublicContact } from "@/components/helper/getPublicContact";
 import { getPublicProjects } from "@/components/helper/getPublicProjects";
 import { Reveal } from "@/components/animations/Reveal";
+import Hero from "@/components/hero/Hero";
+import AboutSection from "@/components/sections/AboutSection";
 
 const HomeContent = async () => {
   const about = await getPublicAbout();
@@ -26,7 +27,11 @@ const HomeContent = async () => {
 
       <section id="about" className="section-spacing">
         <Reveal delay={0.1}>
-          <AboutSection about={about} resumeUrl={about?.resume?.url} />
+          <AboutSection
+            about={about}
+            resumeUrl={about?.resume?.url}
+            project={project}
+          />
         </Reveal>
       </section>
 
