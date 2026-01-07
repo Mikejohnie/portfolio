@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Mail, MapPin, Github, Linkedin, Globe, Download } from "lucide-react";
+import {
+  Mail,
+  MapPin,
+  Github,
+  Linkedin,
+  Globe,
+  Download,
+  Twitter,
+} from "lucide-react";
 import ResumeButton from "../home/ResumeButton";
 import { ContactUI } from "@/lib/types";
 
@@ -111,6 +119,17 @@ export default function ContactSection({ contact, resumeUrl }: Props) {
           >
             <Linkedin className="h-5 w-5" />
             LinkedIn
+          </Link>
+        )}
+
+        {contact.twitter && (
+          <Link
+            href={contact.twitter}
+            target="_blank"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition"
+          >
+            <Twitter className="h-5 w-5" />
+            Twitter
           </Link>
         )}
 
