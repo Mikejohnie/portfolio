@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "Michael Nku Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: "/api/og",
         width: 1200,
         height: 630,
         alt: "Michael Nku Portfolio",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Michael Nku — Full-Stack Web Developer",
     description:
       "Full-Stack Web Developer specializing in modern web systems and clean architecture.",
-    images: ["/og-image.png"],
+    images: ["/api/og"],
   },
 
   icons: {
