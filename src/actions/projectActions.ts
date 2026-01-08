@@ -47,7 +47,18 @@ export async function createProject(values: createProjectSchemaType) {
       isFlagship,
       featured,
       published,
-      images,
+      images: {
+        createMany: {
+          data: images.map((i) => ({
+            url: i.url,
+            key: i.key,
+            alt: i.alt,
+            order: i.order,
+            isCover: i.isCover,
+          })),
+        },
+      },
+
       keyFeatures: keyFeaturesArray,
       techStack: values.techStack ?? [],
       createdById: user.id,
@@ -83,6 +94,7 @@ export async function updateProject(
     isFlagship,
     featured,
     published,
+    images,
   } = parsed.data;
 
   const keyFeaturesArray =
@@ -103,6 +115,18 @@ export async function updateProject(
       isFlagship,
       featured,
       published,
+      images: {
+        createMany: {
+          data: images.map((i) => ({
+            url: i.url,
+            key: i.key,
+            alt: i.alt,
+            order: i.order,
+            isCover: i.isCover,
+          })),
+        },
+      },
+
       keyFeatures: keyFeaturesArray,
       techStack: values.techStack ?? [],
       createdById: user.id,

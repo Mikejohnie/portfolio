@@ -109,7 +109,13 @@ export const createProjectSchema = z.object({
 
   techStack: z.array(techStackInputSchema).min(1),
 
-  images: z.array(productImageSchema).min(1),
+  images: z
+    .array(productImageSchema)
+    .min(1)
+    .refine(
+      (imgs) => imgs.filter((i) => i.isCover).length === 1,
+      "Exactly one image must be marked as cover"
+    ),
 
   keyFeatures: z.string().min(1),
 

@@ -118,7 +118,7 @@ model ProjectImage {
 
   createdAt DateTime @default(now())
 
-  @@index([projectId])
+  @@index([projectId, order])
 }
 
 // model Portfolio {
