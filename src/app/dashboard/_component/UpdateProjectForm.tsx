@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,15 +25,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus } from "lucide-react";
 
-type ProjectFormProps = {
+import { Minus, Plus } from "lucide-react";
+import { UploadButton } from "@/utils/uploadthing";
+import Image from "next/image";
+import { deleteFileAction } from "@/actions/aboutActions";
+
+type Props = {
   project: ProjectUI;
 };
 
-export default function UpdateProjectForm({ project }: ProjectFormProps) {
+export default function UpdateProjectForm({ project }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [deletingKeys, setDeletingKeys] = useState<Set<string>>(new Set());
 
   const form = useForm<UpdateProjectSchemaType>({
     resolver: zodResolver(updateProjectSchema),
@@ -43,8 +48,10 @@ export default function UpdateProjectForm({ project }: ProjectFormProps) {
       summary: project.summary,
       description: project.description ?? "",
 
-      keyFeatures: project.keyFeatures.join("\n") ?? [],
+      keyFeatures: project.keyFeatures.join("\n"),
       techStack: project.techStack ?? [],
+
+      images: project.images ?? [],
 
       liveUrl: project.liveUrl ?? "",
       repoUrl: project.repoUrl ?? "",
@@ -55,36 +62,75 @@ export default function UpdateProjectForm({ project }: ProjectFormProps) {
     },
   });
 
+  const { control, handleSubmit, setValue, getValues } = form;
+
   const {
     fields: techFields,
     append: addTech,
     remove: removeTech,
-  } = useFieldArray({
-    control: form.control,
-    name: "techStack",
+  } = useFieldArray({ control, name: "techStack" });
+
+  const { fields: imageFields, update: updateImage } = useFieldArray({
+    control,
+    name: "images",
   });
 
-  function onSubmit(values: UpdateProjectSchemaType) {
+  const deleteImage = async (key: string, index: number) => {
+    if (deletingKeys.has(key)) return;
+
+    setDeletingKeys((p) => new Set(p).add(key));
+
+    try {
+      await deleteFileAction(key);
+
+      const remaining = getValues("images").filter((_, i) => i !== index);
+
+      if (!remaining.some((img) => img.isCover) && remaining.length > 0) {
+        remaining[0].isCover = true;
+      }
+
+      setValue(
+        "images",
+        remaining.map((img, i) => ({ ...img, order: i })),
+        { shouldValidate: true }
+      );
+
+      toast.success("Image deleted");
+    } catch {
+      toast.error("Failed to delete image");
+    } finally {
+      setDeletingKeys((p) => {
+        const next = new Set(p);
+        next.delete(key);
+        return next;
+      });
+    }
+  };
+
+  const onSubmit = (values: UpdateProjectSchemaType) => {
     startTransition(async () => {
       const res = await updateProject(project.id, values);
-
       if (res?.error) {
         toast.error(res.error);
         return;
       }
-
-      toast.success("Project updated successfully");
+      toast.success("Project updated");
       router.push("/dashboard/projects");
     });
-  }
+  };
 
   return (
     <main className="space-y-12 max-w-xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* PROJECT NAME */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-8 shadow p-6"
+        >
+          <h1 className="text-lg font-medium">Update Project</h1>
+
+          {/* NAME */}
           <FormField
-            control={form.control}
+            control={control}
             name="name"
             render={({ field }) => (
               <FormItem>
@@ -99,7 +145,7 @@ export default function UpdateProjectForm({ project }: ProjectFormProps) {
 
           {/* ROLE */}
           <FormField
-            control={form.control}
+            control={control}
             name="role"
             render={({ field }) => (
               <FormItem>
@@ -114,11 +160,11 @@ export default function UpdateProjectForm({ project }: ProjectFormProps) {
 
           {/* SUMMARY */}
           <FormField
-            control={form.control}
+            control={control}
             name="summary"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project Summary</FormLabel>
+                <FormLabel>Summary</FormLabel>
                 <FormControl>
                   <Textarea rows={3} {...field} />
                 </FormControl>
@@ -129,20 +175,13 @@ export default function UpdateProjectForm({ project }: ProjectFormProps) {
 
           {/* KEY FEATURES */}
           <FormField
-            control={form.control}
+            control={control}
             name="keyFeatures"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Key Features (one per line)</FormLabel>
+                <FormLabel>Key Features</FormLabel>
                 <FormControl>
-                  <Textarea
-                    rows={4}
-                    {...field}
-                    placeholder={`Modern dashboard UI
-Role-based access
-Permission-based access
-`}
-                  />
+                  <Textarea rows={4} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,140 +191,94 @@ Permission-based access
           {/* TECH STACK */}
           <FormItem>
             <FormLabel>Tech Stack</FormLabel>
-
-            <div className="space-y-3">
-              {techFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="grid grid-cols-2 gap-4 items-center"
+            {techFields.map((_, i) => (
+              <div key={i} className="grid grid-cols-2 gap-3">
+                <FormField
+                  control={control}
+                  name={`techStack.${i}.key`}
+                  render={({ field }) => <Input {...field} />}
+                />
+                <FormField
+                  control={control}
+                  name={`techStack.${i}.value`}
+                  render={({ field }) => <Input {...field} />}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => removeTech(i)}
                 >
-                  <FormField
-                    control={form.control}
-                    name={`techStack.${index}.key`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs">Label</FormLabel>
-                        <Input {...field} placeholder="e.g. frontend" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`techStack.${index}.value`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs">Value</FormLabel>
-                        <Input {...field} placeholder="e.g. Next.js" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeTech(index)}
-                  >
-                    <Minus className="mr-2 h-4 w-4" /> Remove
-                  </Button>
-                </div>
-              ))}
-
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => addTech({ key: "", value: "" })}
-              >
-                <Plus className="mr-2 h-4 w-4" /> Add technology
-              </Button>
-            </div>
-
-            <FormMessage />
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => addTech({ key: "", value: "" })}
+            >
+              Add Tech
+            </Button>
           </FormItem>
 
-          {/* LIVE URL */}
-          <FormField
-            control={form.control}
-            name="liveUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Live URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://…" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+          {/* IMAGES */}
+          <FormItem>
+            <FormLabel>Project Images (max 5)</FormLabel>
+
+            {imageFields.length < 5 && (
+              <UploadButton
+                endpoint="projectImage"
+                onClientUploadComplete={(res) => {
+                  const existing = getValues("images");
+                  const uploaded = res.map((f, i) => ({
+                    url: f.url,
+                    key: f.key,
+                    alt: "",
+                    order: existing.length + i,
+                    isCover: existing.length === 0 && i === 0,
+                  }));
+                  setValue("images", [...existing, ...uploaded], {
+                    shouldValidate: true,
+                  });
+                }}
+              />
             )}
-          />
 
-          {/* REPO URL */}
-          <FormField
-            control={form.control}
-            name="repoUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Repository URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://github.com/…" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* FLAGS */}
-          <div className="space-y-3">
-            <FormField
-              control={form.control}
-              name="isFlagship"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Flagship Project</FormLabel>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="featured"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Featured</FormLabel>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="published"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Published</FormLabel>
-                </FormItem>
-              )}
-            />
-          </div>
+            {imageFields.map((img, i) => (
+              <div key={img.key} className="flex gap-4 border p-3">
+                <Image src={img.url} width={120} height={80} alt="" />
+                <div className="flex-1 space-y-2">
+                  <FormField
+                    control={control}
+                    name={`images.${i}.alt`}
+                    render={({ field }) => <Input {...field} />}
+                  />
+                  <Checkbox
+                    checked={img.isCover}
+                    onCheckedChange={() =>
+                      imageFields.forEach((_, idx) =>
+                        updateImage(idx, {
+                          ...imageFields[idx],
+                          isCover: idx === i,
+                        })
+                      )
+                    }
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  disabled={deletingKeys.has(img.key)}
+                  onClick={() => deleteImage(img.key, i)}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </FormItem>
 
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Saving..." : "Update Project"}
+            {isPending ? "Saving…" : "Update Project"}
           </Button>
         </form>
       </Form>
