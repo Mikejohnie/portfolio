@@ -265,24 +265,42 @@ export default function UpdateProjectForm({ project }: Props) {
                     </div>
                   );
                 })}
+
+                {/* META */}
                 <div className="flex-1 space-y-2">
                   <FormField
                     control={control}
                     name={`images.${i}.alt`}
-                    render={({ field }) => <Input {...field} />}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs">Alt text</FormLabel>
+                        <Input {...field} placeholder="image description" />
+                      </FormItem>
+                    )}
                   />
-                  <Checkbox
-                    checked={img.isCover}
-                    onCheckedChange={() =>
-                      imageFields.forEach((_, idx) =>
-                        updateImage(idx, {
-                          ...imageFields[idx],
-                          isCover: idx === i,
-                        })
-                      )
-                    }
+
+                  <FormField
+                    control={control}
+                    name={`images.${i}.isCover`}
+                    render={({ field }) => (
+                      <FormItem className="flex items-center gap-2 space-y-0">
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            imageFields.forEach((_, index) => {
+                              updateImage(index, {
+                                ...imageFields[index],
+                                isCover: index === i ? Boolean(checked) : false,
+                              });
+                            });
+                          }}
+                        />
+                        <FormLabel className="text-sm">Cover image</FormLabel>
+                      </FormItem>
+                    )}
                   />
                 </div>
+
                 <Button
                   type="button"
                   variant="destructive"
