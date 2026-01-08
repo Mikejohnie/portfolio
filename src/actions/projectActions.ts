@@ -27,6 +27,7 @@ export async function createProject(values: createProjectSchemaType) {
     isFlagship,
     featured,
     published,
+    images,
   } = parsed.data;
 
   const keyFeaturesArray =
@@ -46,6 +47,7 @@ export async function createProject(values: createProjectSchemaType) {
       isFlagship,
       featured,
       published,
+      images,
       keyFeatures: keyFeaturesArray,
       techStack: values.techStack ?? [],
       createdById: user.id,

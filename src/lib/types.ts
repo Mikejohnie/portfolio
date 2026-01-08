@@ -20,6 +20,15 @@ export type SessionUser = {
   role?: string | null;
 };
 
+export type ProjectImage = {
+  id: string;
+  url: string;
+  key: string;
+  isCover: boolean;
+  alt: string;
+  order: number;
+};
+
 export type ProjectDB = {
   id: string;
   name: string;
@@ -29,6 +38,8 @@ export type ProjectDB = {
   description: string | null;
   keyFeatures: string[];
   techStack: { key: string; value: string }[];
+
+  images: ProjectImage[];
 
   isFlagship: boolean;
   featured: boolean;

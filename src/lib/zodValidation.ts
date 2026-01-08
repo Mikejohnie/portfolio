@@ -93,6 +93,14 @@ export const techStackInputSchema = z.object({
 });
 
 //create projects
+export const productImageSchema = z.object({
+  url: z.string().url(),
+  key: z.string(),
+  isCover: z.boolean(),
+  alt: z.string().min(1),
+  order: z.number().int().min(0),
+});
+
 export const createProjectSchema = z.object({
   name: z.string().min(3),
   role: z.string(),
@@ -100,6 +108,8 @@ export const createProjectSchema = z.object({
   description: z.string().optional(),
 
   techStack: z.array(techStackInputSchema).min(1),
+
+  images: z.array(productImageSchema).min(1),
 
   keyFeatures: z.string().min(1),
 
