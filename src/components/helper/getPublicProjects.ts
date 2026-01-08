@@ -16,6 +16,7 @@ export async function getPublicProjects(): Promise<ProjectUI[]> {
       name: true,
       role: true,
       summary: true,
+      images: true,
       description: true,
       keyFeatures: true,
       techStack: true,
@@ -30,6 +31,7 @@ export async function getPublicProjects(): Promise<ProjectUI[]> {
 
   return projects.map((p) => ({
     ...p,
+    images: p.images as ProjectUI["images"],
     techStack: (p.techStack ?? []) as { key: string; value: string }[],
   }));
 }
