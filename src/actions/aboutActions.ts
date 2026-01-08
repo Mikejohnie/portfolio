@@ -19,7 +19,7 @@ export const deleteFileAction = async (keyToDelete: string) => {
 };
 
 // delete image from DB + UploadThing
-export const deleteProductImageAction = async (imageId: string) => {
+export const deleteProjectImageAction = async (imageId: string) => {
   const user = await CurrentUser();
   if (!user) return { error: "Unauthorized" };
 

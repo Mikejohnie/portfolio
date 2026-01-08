@@ -26,10 +26,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
-import { Minus, Plus } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
-import { deleteFileAction } from "@/actions/aboutActions";
+import { deleteProjectImageAction } from "@/actions/aboutActions";
 
 type Props = {
   project: ProjectUI;
@@ -93,7 +92,7 @@ export default function UpdateProjectForm({ project }: Props) {
     setDeletingKeys((p) => new Set(p).add(key));
 
     try {
-      await deleteFileAction(key);
+      await deleteProjectImageAction(key);
 
       const remaining = getValues("images").filter((_, i) => i !== index);
 
@@ -304,10 +303,11 @@ export default function UpdateProjectForm({ project }: Props) {
                 <Button
                   type="button"
                   variant="destructive"
+                  size="sm"
                   disabled={deletingKeys.has(img.key)}
                   onClick={() => deleteImage(img.key, i)}
                 >
-                  Remove
+                  {deletingKeys.has(img.key) ? "Deleting…" : "Remove"}
                 </Button>
               </div>
             ))}
