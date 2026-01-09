@@ -9,7 +9,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { ProjectUI } from "@/lib/types";
+import { ProjectImage, ProjectUI } from "@/lib/types";
 import { DeleteProjectModal } from "./DeleteProjectModal";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { FolderCode } from "lucide-react";

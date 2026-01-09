@@ -7,10 +7,16 @@ import Link from "next/link";
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      images: {
+        orderBy: { order: "asc" },
+      },
+    },
   });
 
   const normalized = projects.map((p) => ({
     ...p,
+    images: p.images ?? [],
     keyFeatures: p.keyFeatures ?? [],
     techStack: (p.techStack ?? []) as { key: string; value: string }[],
   }));

@@ -97,7 +97,7 @@ export const projectImageSchema = z.object({
   url: z.string().url(),
   key: z.string(),
   isCover: z.boolean(),
-  alt: z.string().min(1),
+  alt: z.string().min(1).optional(),
   order: z.number().int().min(0),
 });
 

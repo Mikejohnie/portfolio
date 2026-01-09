@@ -25,7 +25,7 @@ export type ProjectImage = {
   url: string;
   key: string;
   isCover: boolean;
-  alt: string;
+  alt: string | null;
   order: number;
 };
 
