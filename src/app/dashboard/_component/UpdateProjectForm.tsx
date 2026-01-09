@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,7 +61,26 @@ export default function UpdateProjectForm({ project }: Props) {
     },
   });
 
-  const { control, handleSubmit, setValue, getValues } = form;
+  const { control, handleSubmit, setValue, getValues, reset } = form;
+
+  useEffect(() => {
+    if (!project) return;
+
+    reset({
+      name: project.name,
+      role: project.role,
+      summary: project.summary,
+      description: project.description ?? "",
+      keyFeatures: project.keyFeatures.join("\n"),
+      techStack: project.techStack ?? [],
+      images: project.images ?? [],
+      liveUrl: project.liveUrl ?? "",
+      repoUrl: project.repoUrl ?? "",
+      isFlagship: project.isFlagship,
+      featured: project.featured,
+      published: project.published,
+    });
+  }, [project, reset]);
 
   const {
     fields: techFields,
@@ -231,6 +250,7 @@ export default function UpdateProjectForm({ project }: Props) {
                 endpoint="projectImage"
                 onClientUploadComplete={(res) => {
                   const existing = getValues("images");
+
                   const uploaded = res.map((f, i) => ({
                     url: f.url,
                     key: f.key,
@@ -238,6 +258,7 @@ export default function UpdateProjectForm({ project }: Props) {
                     order: existing.length + i,
                     isCover: existing.length === 0 && i === 0,
                   }));
+
                   setValue("images", [...existing, ...uploaded], {
                     shouldValidate: true,
                   });
@@ -246,71 +267,81 @@ export default function UpdateProjectForm({ project }: Props) {
               />
             )}
 
-            {imageFields.map((img, i) => (
-              <div key={img.key} className="flex gap-4 border p-3">
-                {watchedImages?.map((img) => {
-                  return (
-                    <div
-                      key={img.key}
-                      className="relative w-40 h-40 rounded-lg overflow-hidden border"
-                    >
+            <div className="space-y-4">
+              {imageFields.map((field, index) => {
+                const img = watchedImages?.[index];
+
+                if (!img) return null;
+
+                return (
+                  <div
+                    key={field.id}
+                    className="flex gap-4 items-start border rounded-lg p-3"
+                  >
+                    {/* PREVIEW */}
+                    <div className="relative w-32 h-20 rounded-md overflow-hidden border">
                       <Image
                         src={img.url}
                         alt={img.alt || "Project image"}
-                        width={120}
-                        height={80}
-                        className="rounded object-cover transition"
+                        fill
+                        className="object-cover"
                       />
                     </div>
-                  );
-                })}
 
-                {/* META */}
-                <div className="flex-1 space-y-2">
-                  <FormField
-                    control={control}
-                    name={`images.${i}.alt`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs">Alt text</FormLabel>
-                        <Input {...field} placeholder="image description" />
-                      </FormItem>
-                    )}
-                  />
+                    {/* META */}
+                    <div className="flex-1 space-y-2">
+                      <FormField
+                        control={control}
+                        name={`images.${index}.alt`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-xs">Alt text</FormLabel>
+                            <Input {...field} />
+                          </FormItem>
+                        )}
+                      />
 
-                  <FormField
-                    control={control}
-                    name={`images.${i}.isCover`}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-2 space-y-0">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            imageFields.forEach((_, index) => {
-                              updateImage(index, {
-                                ...imageFields[index],
-                                isCover: index === i ? Boolean(checked) : false,
-                              });
-                            });
-                          }}
-                        />
-                        <FormLabel className="text-sm">Cover image</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                      <FormField
+                        control={control}
+                        name={`images.${index}.isCover`}
+                        render={({ field }) => (
+                          <FormItem className="flex items-center gap-2 space-y-0">
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(checked) => {
+                                imageFields.forEach((_, i) => {
+                                  updateImage(i, {
+                                    ...imageFields[i],
+                                    isCover:
+                                      i === index ? Boolean(checked) : false,
+                                  });
+                                });
+                              }}
+                            />
+                            <FormLabel className="text-sm">
+                              Cover image
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  disabled={deletingKeys.has(img.key)}
-                  onClick={() => deleteImage(img.key, i)}
-                >
-                  {deletingKeys.has(img.key) ? "Deleting…" : "Remove"}
-                </Button>
-              </div>
-            ))}
+                    {/* DELETE */}
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      disabled={deletingKeys.has(img.key)}
+                      onClick={() => deleteImage(img.key, index)}
+                    >
+                      {deletingKeys.has(img.key) ? "Deleting…" : "Remove"}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <FormMessage />
           </FormItem>
 
           <Button type="submit" disabled={isPending}>
