@@ -50,7 +50,13 @@ export default function UpdateProjectForm({ project }: Props) {
       keyFeatures: project.keyFeatures.join("\n"),
       techStack: project.techStack ?? [],
 
-      images: project.images ?? [],
+      images: project.images.map((img) => ({
+        url: img.url,
+        key: img.key,
+        isCover: img.isCover,
+        order: img.order,
+        alt: img.alt ?? "",
+      })),
 
       liveUrl: project.liveUrl ?? "",
       repoUrl: project.repoUrl ?? "",
@@ -71,11 +77,21 @@ export default function UpdateProjectForm({ project }: Props) {
       role: project.role,
       summary: project.summary,
       description: project.description ?? "",
+
       keyFeatures: project.keyFeatures.join("\n"),
       techStack: project.techStack ?? [],
-      images: project.images ?? [],
+
+      images: project.images.map((img) => ({
+        url: img.url,
+        key: img.key,
+        isCover: img.isCover,
+        order: img.order,
+        alt: img.alt ?? "",
+      })),
+
       liveUrl: project.liveUrl ?? "",
       repoUrl: project.repoUrl ?? "",
+
       isFlagship: project.isFlagship,
       featured: project.featured,
       published: project.published,
