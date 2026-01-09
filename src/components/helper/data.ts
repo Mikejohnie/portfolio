@@ -25,7 +25,14 @@ export const getUserById = async (id: string) => {
 };
 
 export async function getProjectForEdit(id: string): Promise<ProjectDB | null> {
-  const project = await prisma.project.findUnique({ where: { id } });
+  const project = await prisma.project.findUnique({
+    where: { id },
+    include: {
+      images: {
+        orderBy: { order: "asc" },
+      },
+    },
+  });
 
   if (!project) return null;
 
@@ -36,6 +43,7 @@ export async function getProjectForEdit(id: string): Promise<ProjectDB | null> {
     summary: project.summary,
     description: project.description,
     keyFeatures: project.keyFeatures ?? [],
+    images: project.images ?? [],
     techStack: (project.techStack ?? []) as { key: string; value: string }[],
     isFlagship: project.isFlagship,
     featured: project.featured,
