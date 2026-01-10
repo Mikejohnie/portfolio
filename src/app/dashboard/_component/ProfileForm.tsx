@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserDTO } from "@/lib/types";
 import { updateUserProfile } from "@/actions/user";
-import { userSchema, UserSchemaType } from "@/lib/zodValidation";
+import { updateUserSchema, updateUserSchemaType } from "@/lib/zodValidation";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
 import { deleteFileAction } from "@/actions/aboutActions";
@@ -40,18 +40,18 @@ export default function ProfileForm({ user }: Props) {
 
   const [deletingKeys, setDeletingKeys] = useState<Set<string>>(new Set());
 
-  const form = useForm<UserSchemaType>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<updateUserSchemaType>({
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
       name: user.name ?? "",
       username: user.username ?? "",
-      profileImage: user.profileImage ?? "",
+      profileImage: user.profileImage ?? undefined,
     },
   });
 
   const { control, handleSubmit, setValue, getValues, reset } = form;
 
-  const onSubmit = (values: UserSchemaType) => {
+  const onSubmit = (values: updateUserSchemaType) => {
     startTransition(async () => {
       const res = await updateUserProfile(values);
 
@@ -74,7 +74,7 @@ export default function ProfileForm({ user }: Props) {
 
     try {
       await deleteFileAction(image.key);
-      setValue("profileImage", undefined);
+      setValue("profileImage", undefined, { shouldDirty: true });
       toast.success("Profile image removed");
     } catch {
       toast.error("Failed to remove image");
@@ -138,13 +138,16 @@ export default function ProfileForm({ user }: Props) {
                         <div className="w-full">
                           <UploadButton
                             endpoint="profileImage"
-                            onClientUploadComplete={(res) => {
+                            onClientUploadComplete={async (res) => {
                               const file = res[0];
                               setValue("profileImage", {
                                 url: file.url,
                                 key: file.key,
                               });
                               toast.success("Profile image updated");
+                              await updateUserProfile({
+                                profileImage: { url: file.url, key: file.key },
+                              });
                             }}
                             className="
                   ut-button:bg-transparent
@@ -164,6 +167,9 @@ export default function ProfileForm({ user }: Props) {
                       {/* REMOVE */}
                       {form.watch("profileImage") && (
                         <DropdownMenuItem
+                          disabled={deletingKeys.has(
+                            form.watch("profileImage")?.key ?? ""
+                          )}
                           className="text-red-600 cursor-pointer"
                           onClick={deleteProfileImage}
                         >
