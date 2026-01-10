@@ -19,6 +19,8 @@ export async function trackResumeDownload() {
     create: {
       date,
       resumeDownloads: 1,
+      totalVisitors: 0,
+      contactSubmits: 0,
     },
   });
 }
@@ -32,8 +34,26 @@ export async function trackVisitor() {
     },
     create: {
       date,
-
       totalVisitors: 1,
+      resumeDownloads: 0,
+      contactSubmits: 0,
+    },
+  });
+}
+
+export async function trackContactSubmit() {
+  const date = today();
+
+  await prisma.portfolioAnalytics.upsert({
+    where: { date },
+    update: {
+      contactSubmits: { increment: 1 },
+    },
+    create: {
+      date,
+      totalVisitors: 0,
+      resumeDownloads: 0,
+      contactSubmits: 1,
     },
   });
 }

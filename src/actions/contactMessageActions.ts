@@ -5,12 +5,7 @@ import {
   ContactMessageSchemaType,
   contactMessageSchema,
 } from "@/lib/zodValidation";
-
-function today() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
+import { trackContactSubmit } from "./analyticsActions";
 
 export async function sendContactMessage(values: ContactMessageSchemaType) {
   const parsed = contactMessageSchema.safeParse(values);
@@ -34,18 +29,7 @@ export async function sendContactMessage(values: ContactMessageSchemaType) {
       },
     });
 
-    const date = today();
-
-    await prisma.portfolioAnalytics.upsert({
-      where: { date },
-      update: {
-        contactSubmits: { increment: 1 },
-      },
-      create: {
-        date,
-        contactSubmits: 1,
-      },
-    });
+    await trackContactSubmit();
 
     return { success: true };
   } catch (error) {
