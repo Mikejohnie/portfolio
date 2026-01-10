@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   const about = await getAdminAbout();
   const contact = await getAdminContact();
 
-  const avatar = user?.profileImage ?? user?.image ?? null;
+  const avatar = user?.profileImage?.url ?? user?.image ?? null;
 
   return (
     <div className="max-w-5xl mx-auto space-y-10">

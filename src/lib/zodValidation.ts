@@ -1,5 +1,13 @@
 import z from "zod";
 
+//for images and files
+export const fileSchema = z
+  .object({
+    url: z.string().url(),
+    key: z.string(),
+  })
+  .optional();
+
 //register a user
 export const userSchema = z
   .object({
@@ -49,14 +57,7 @@ export const updateUserSchema = z
       .min(2, { message: "name must be at least 2 characters." })
       .optional(),
 
-    profileImage: z
-      .object({
-        url: z.string().url(),
-        key: z.string(),
-      })
-      .optional()
-      .nullable(),
-
+    profileImage: fileSchema,
     username: z
       .string({ message: "Username must be a string." })
       .min(2, { message: "Username must be at least 2 characters." })
@@ -163,13 +164,6 @@ export const experienceItemSchema = z.object({
   context: z.string().optional(),
   description: z.string().min(10),
 });
-
-export const fileSchema = z
-  .object({
-    url: z.string().url(),
-    key: z.string(),
-  })
-  .optional();
 
 const currentYear = new Date().getFullYear();
 

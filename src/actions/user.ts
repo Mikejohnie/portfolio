@@ -122,9 +122,9 @@ export async function updateUserProfile(values: updateUserSchemaType) {
   await prisma.user.update({
     where: { id: user.id },
     data: {
-      ...(name !== undefined && { name }),
-      ...(username !== undefined && { username }),
-      ...(profileImage !== undefined && { profileImage }),
+      name,
+      username,
+      profileImage,
     },
   });
 
