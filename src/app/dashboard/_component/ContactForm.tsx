@@ -17,9 +17,8 @@ import {
 } from "@/components/ui/form";
 import { ContactSchemaType, contactSchema } from "@/lib/zodValidation";
 import { ContactUI } from "@/lib/types";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 type Props = {
   initialData?: ContactUI | null;
@@ -27,10 +26,9 @@ type Props = {
 
 export default function ContactForm({ initialData }: Props) {
   const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isEditMode = Boolean(initialData);
-
-  const router = useRouter();
 
   const form = useForm<ContactSchemaType>({
     resolver: zodResolver(contactSchema),
@@ -81,24 +79,23 @@ export default function ContactForm({ initialData }: Props) {
     });
   };
 
-  const handleContactReset = () => {
+  const handleContactReset = async () => {
+    setIsLoading(true);
     try {
-      startTransition(async () => {
-        await deleteContact().then((res) => {
-          if (res?.error) {
-            toast.error(res.error);
-            return;
-          }
+      await deleteContact().then((res) => {
+        if (res?.error) {
+          toast.error(res.error);
+          return;
+        }
 
-          form.reset();
-          toast.success("Contact reset successfully");
-        });
+        form.reset();
+        toast.success("Contact reset successfully");
       });
     } catch (error) {
       console.error(error);
     } finally {
-      // router.refresh();
       window.location.reload();
+      setIsLoading(false);
     }
   };
 
@@ -245,10 +242,10 @@ export default function ContactForm({ initialData }: Props) {
             <Button
               type="button"
               variant="destructive"
-              disabled={isPending}
+              disabled={isLoading}
               onClick={handleContactReset}
             >
-              {isPending ? (
+              {isLoading ? (
                 <Loader2 className="animate-spin w-4 h-4" />
               ) : (
                 "Reset"
