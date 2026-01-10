@@ -18,7 +18,7 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-5xl mx-auto space-y-10">
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">Profile</h1>
+        <h1 className="text-2xl font-semibold">My Profile</h1>
         <p className="text-sm text-muted-foreground">
           Manage your personal account information and security.
         </p>
