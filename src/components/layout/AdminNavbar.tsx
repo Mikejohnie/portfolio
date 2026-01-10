@@ -27,6 +27,7 @@ import {
   User,
   User2,
   Phone,
+  User2Icon,
 } from "lucide-react";
 import { UserDTO } from "@/lib/types";
 import { useLogout } from "@/hooks/useLogout";
@@ -156,10 +157,20 @@ export default function AdminNavbar({
 
           <DropdownMenuContent align="end" className="w-56">
             <div className="px-3 py-2">
-              <p className="text-sm font-medium">{user?.name}</p>
+              <p className="text-sm font-medium">
+                {user?.name || user?.username}
+              </p>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
 
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/profile" className="flex gap-2">
+                <User2Icon className="w-4 h-4" />
+                My Profile
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
